@@ -1,22 +1,31 @@
-import { useMemo, useState, type ReactNode } from 'react'
+import { useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import {
   FiActivity,
   FiBarChart2,
   FiBookOpen,
   FiChevronLeft,
   FiChevronRight,
+  FiEdit3,
   FiFolder,
   FiGrid,
   FiInbox,
+  FiLock,
+  FiLogOut,
   FiMenu,
   FiMessageSquare,
   FiMoon,
+  FiPlus,
+  FiSave,
   FiSearch,
+  FiSettings,
+  FiShield,
   FiStar,
   FiSun,
+  FiTrash2,
   FiX,
 } from 'react-icons/fi'
 
+import { BrandLogo } from '../components/BrandLogo'
 import { SEO } from '../components/SEO'
 import { useTheme } from '../hooks/useTheme'
 
@@ -25,8 +34,11 @@ type AdminSection =
   | 'projects'
   | 'blogs'
   | 'testimonials'
-  | 'submissions'
-  | 'contacts'
+  | 'inquiries'
+  | 'messages'
+  | 'settings'
+
+type ManageSection = Exclude<AdminSection, 'overview' | 'settings'>
 
 type AdminRecord = {
   id: string
@@ -38,16 +50,25 @@ type AdminRecord = {
   value: string
 }
 
+type SettingsState = {
+  studioEmail: string
+  notificationEmail: string
+  whatsappNumber: string
+  defaultRole: string
+  leadSla: string
+}
+
 const sections: Array<{ id: AdminSection; label: string; icon: typeof FiGrid }> = [
   { id: 'overview', label: 'Overview', icon: FiGrid },
   { id: 'projects', label: 'Projects', icon: FiFolder },
-  { id: 'blogs', label: 'Blogs', icon: FiBookOpen },
+  { id: 'blogs', label: 'Blog', icon: FiBookOpen },
   { id: 'testimonials', label: 'Testimonials', icon: FiStar },
-  { id: 'submissions', label: 'Project Submissions', icon: FiInbox },
-  { id: 'contacts', label: 'Contacts', icon: FiMessageSquare },
+  { id: 'inquiries', label: 'Project Inquiries', icon: FiInbox },
+  { id: 'messages', label: 'Contact Messages', icon: FiMessageSquare },
+  { id: 'settings', label: 'Settings', icon: FiSettings },
 ]
 
-const records: Record<Exclude<AdminSection, 'overview'>, AdminRecord[]> = {
+const initialRecords: Record<ManageSection, AdminRecord[]> = {
   projects: [
     {
       id: 'PRJ-1042',
@@ -84,15 +105,6 @@ const records: Record<Exclude<AdminSection, 'overview'>, AdminRecord[]> = {
       status: 'Delivered',
       date: '2026-06-11',
       value: 'Learning',
-    },
-    {
-      id: 'PRJ-1022',
-      title: 'Smart Tank Monitoring System',
-      owner: 'Rohan Iyer',
-      category: 'IoT',
-      status: 'Active',
-      date: '2026-06-08',
-      value: 'Monitoring',
     },
   ],
   blogs: [
@@ -153,9 +165,9 @@ const records: Record<Exclude<AdminSection, 'overview'>, AdminRecord[]> = {
       value: '5 stars',
     },
   ],
-  submissions: [
+  inquiries: [
     {
-      id: 'SUB-312',
+      id: 'INQ-312',
       title: 'AI sorting system for lab samples',
       owner: 'Priya Menon',
       category: 'AI',
@@ -164,7 +176,7 @@ const records: Record<Exclude<AdminSection, 'overview'>, AdminRecord[]> = {
       value: 'Rs. 75k+',
     },
     {
-      id: 'SUB-311',
+      id: 'INQ-311',
       title: 'Water level dashboard with alerts',
       owner: 'Rohan Iyer',
       category: 'IoT',
@@ -173,7 +185,7 @@ const records: Record<Exclude<AdminSection, 'overview'>, AdminRecord[]> = {
       value: 'Rs. 25k+',
     },
     {
-      id: 'SUB-309',
+      id: 'INQ-309',
       title: 'Mini conveyor automation demo',
       owner: 'Kiran Patel',
       category: 'Automation',
@@ -181,19 +193,10 @@ const records: Record<Exclude<AdminSection, 'overview'>, AdminRecord[]> = {
       date: '2026-06-25',
       value: 'Rs. 2L+',
     },
-    {
-      id: 'SUB-305',
-      title: 'RFID attendance hardware',
-      owner: 'Sneha Kapoor',
-      category: 'Embedded',
-      status: 'New',
-      date: '2026-06-21',
-      value: 'Guidance',
-    },
   ],
-  contacts: [
+  messages: [
     {
-      id: 'CON-902',
+      id: 'MSG-902',
       title: 'Free consultation request',
       owner: 'Ananya Bose',
       category: 'Student',
@@ -202,7 +205,7 @@ const records: Record<Exclude<AdminSection, 'overview'>, AdminRecord[]> = {
       value: 'Email',
     },
     {
-      id: 'CON-897',
+      id: 'MSG-897',
       title: 'Partnership inquiry',
       owner: 'Arjun Malhotra',
       category: 'Startup',
@@ -211,7 +214,7 @@ const records: Record<Exclude<AdminSection, 'overview'>, AdminRecord[]> = {
       value: 'WhatsApp',
     },
     {
-      id: 'CON-891',
+      id: 'MSG-891',
       title: 'Industrial training request',
       owner: 'Neha Verma',
       category: 'Industry',
@@ -232,17 +235,63 @@ const categoryData = [
 ]
 
 const pageSize = 4
+const emptyRecord: AdminRecord = {
+  id: '',
+  title: '',
+  owner: '',
+  category: '',
+  status: 'Draft',
+  date: new Date().toISOString().slice(0, 10),
+  value: '',
+}
 
 export function Admin() {
+  const [authenticated, setAuthenticated] = useState(
+    () => window.localStorage.getItem('projectsforu-admin-auth') === 'true',
+  )
+  const [loginError, setLoginError] = useState('')
   const [activeSection, setActiveSection] = useState<AdminSection>('overview')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [records, setRecords] = useState(initialRecords)
+  const [settings, setSettings] = useState<SettingsState>({
+    studioEmail: 'hello@projectsforu.in',
+    notificationEmail: 'admin@projectsforu.in',
+    whatsappNumber: '+91 98765 43210',
+    defaultRole: 'Editor',
+    leadSla: '4 hours',
+  })
   const { theme, toggleTheme } = useTheme()
+
+  function handleLogin(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const email = String(formData.get('email') ?? '')
+    const password = String(formData.get('password') ?? '')
+
+    if (email === 'admin@projectsforu.in' && password === 'Admin@123') {
+      window.localStorage.setItem('projectsforu-admin-auth', 'true')
+      setAuthenticated(true)
+      setLoginError('')
+      return
+    }
+
+    setLoginError('Use admin@projectsforu.in / Admin@123 for this demo dashboard.')
+  }
+
+  function logout() {
+    window.localStorage.removeItem('projectsforu-admin-auth')
+    setAuthenticated(false)
+  }
+
+  if (!authenticated) {
+    return <AdminLogin onLogin={handleLogin} error={loginError} />
+  }
 
   return (
     <>
       <SEO
         title="Admin Dashboard | ProjectsforU"
-        description="ProjectsforU admin dashboard for managing projects, blogs, testimonials, submissions, and contacts."
+        description="Secure ProjectsforU admin dashboard for managing projects, blog, testimonials, inquiries, contact messages, and settings."
       />
       <div className="min-h-screen bg-[#f7f8fb] text-slate-950 dark:bg-[#07080b] dark:text-white">
         <aside
@@ -252,13 +301,11 @@ export function Admin() {
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="grid h-10 w-10 place-items-center rounded-[8px] bg-slate-950 text-sm font-black text-secondary dark:bg-secondary dark:text-primary">
-                PU
-              </span>
+              <BrandLogo variant="symbol" className="h-10 w-10 rounded-[8px]" />
               <div>
                 <p className="font-semibold tracking-tight">ProjectsforU</p>
                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                  Admin Console
+                  Secure Admin Console
                 </p>
               </div>
             </div>
@@ -299,9 +346,12 @@ export function Admin() {
           </nav>
 
           <div className="absolute bottom-4 left-4 right-4 rounded-[8px] border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-white/[0.04]">
-            <p className="text-sm font-semibold">Lead response SLA</p>
+            <div className="flex items-center gap-2">
+              <FiShield className="text-emerald-500" aria-hidden="true" />
+              <p className="text-sm font-semibold">Admin session secured</p>
+            </div>
             <p className="mt-2 text-xs leading-5 text-slate-500 dark:text-slate-400">
-              7 new leads need review. Keep the average first response under 4 hours.
+              Role: Admin. In production this connects to the FastAPI JWT backend.
             </p>
           </div>
         </aside>
@@ -329,12 +379,14 @@ export function Admin() {
                 </button>
                 <div>
                   <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                    Admin / {sections.find((item) => item.id === activeSection)?.label}
+                    Admin / {sectionLabel(activeSection)}
                   </p>
                   <h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
                     {activeSection === 'overview'
                       ? 'Dashboard Overview'
-                      : `Manage ${sections.find((item) => item.id === activeSection)?.label}`}
+                      : activeSection === 'settings'
+                        ? 'Settings'
+                        : `Manage ${sectionLabel(activeSection)}`}
                   </h1>
                 </div>
               </div>
@@ -347,18 +399,49 @@ export function Admin() {
                 >
                   {theme === 'dark' ? <FiSun aria-hidden="true" /> : <FiMoon aria-hidden="true" />}
                 </button>
-                <div className="hidden items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-2 dark:border-white/10 dark:bg-white/[0.04] sm:flex">
-                  <span className="grid h-8 w-8 place-items-center rounded-full bg-secondary text-xs font-black text-primary">
-                    AD
-                  </span>
-                  <span className="text-sm font-semibold">Admin</span>
-                </div>
+                <button
+                  className="hidden min-h-10 items-center gap-2 rounded-[8px] border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 transition hover:border-red-300 hover:text-red-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-white sm:inline-flex"
+                  onClick={logout}
+                  type="button"
+                >
+                  <FiLogOut aria-hidden="true" />
+                  Logout
+                </button>
               </div>
             </div>
           </header>
 
           <main className="px-5 py-6 sm:px-6 lg:px-8">
-            {activeSection === 'overview' ? <Overview /> : <ManagementTable section={activeSection} />}
+            {activeSection === 'overview' ? (
+              <Overview records={records} />
+            ) : activeSection === 'settings' ? (
+              <SettingsPanel settings={settings} onSave={setSettings} />
+            ) : (
+              <ManagementTable
+                records={records[activeSection]}
+                section={activeSection}
+                onCreate={(record) =>
+                  setRecords((current) => ({
+                    ...current,
+                    [activeSection]: [record, ...current[activeSection]],
+                  }))
+                }
+                onDelete={(id) =>
+                  setRecords((current) => ({
+                    ...current,
+                    [activeSection]: current[activeSection].filter((item) => item.id !== id),
+                  }))
+                }
+                onUpdate={(record) =>
+                  setRecords((current) => ({
+                    ...current,
+                    [activeSection]: current[activeSection].map((item) =>
+                      item.id === record.id ? record : item,
+                    ),
+                  }))
+                }
+              />
+            )}
           </main>
         </div>
       </div>
@@ -366,7 +449,74 @@ export function Admin() {
   )
 }
 
-function Overview() {
+function AdminLogin({
+  error,
+  onLogin,
+}: {
+  error: string
+  onLogin: (event: FormEvent<HTMLFormElement>) => void
+}) {
+  return (
+    <>
+      <SEO
+        title="Admin Login | ProjectsforU"
+        description="Secure ProjectsforU admin login."
+      />
+      <main className="future-shell grid min-h-screen place-items-center px-5 py-12">
+        <form
+          className="glass-panel premium-border w-full max-w-md rounded-[28px] p-7"
+          onSubmit={onLogin}
+        >
+          <div className="mb-8 flex items-center gap-3">
+            <BrandLogo variant="symbol" className="h-12 w-12 rounded-[14px] shadow-xl shadow-primary/20" />
+            <div>
+              <h1 className="text-2xl font-semibold text-[#07111f] dark:text-white">
+                Admin Login
+              </h1>
+              <p className="text-sm text-[#52627a] dark:text-slate-400">
+                Secure access for ProjectsforU staff
+              </p>
+            </div>
+          </div>
+          <label className="grid gap-2">
+            <span className="text-sm font-semibold text-[#253248] dark:text-white">Email</span>
+            <input
+              className="min-h-12 rounded-[10px] border border-primary/10 bg-white/78 px-4 outline-none transition focus:border-secondary focus:ring-4 focus:ring-secondary/15 dark:border-white/10 dark:bg-white/[0.06]"
+              defaultValue="admin@projectsforu.in"
+              name="email"
+              type="email"
+            />
+          </label>
+          <label className="mt-5 grid gap-2">
+            <span className="text-sm font-semibold text-[#253248] dark:text-white">Password</span>
+            <div className="flex items-center rounded-[10px] border border-primary/10 bg-white/78 px-4 transition focus-within:border-secondary focus-within:ring-4 focus-within:ring-secondary/15 dark:border-white/10 dark:bg-white/[0.06]">
+              <FiLock className="mr-3 text-secondary" aria-hidden="true" />
+              <input
+                className="min-h-12 w-full bg-transparent outline-none"
+                defaultValue="Admin@123"
+                name="password"
+                type="password"
+              />
+            </div>
+          </label>
+          {error ? <p className="mt-4 text-sm font-semibold text-red-500">{error}</p> : null}
+          <button
+            className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-xl shadow-primary/20 transition hover:bg-secondary hover:text-primary"
+            type="submit"
+          >
+            Sign in securely
+          </button>
+          <p className="mt-5 text-xs leading-5 text-[#647189] dark:text-slate-400">
+            Demo credentials are prefilled. Production authentication is ready to connect
+            with the FastAPI JWT backend.
+          </p>
+        </form>
+      </main>
+    </>
+  )
+}
+
+function Overview({ records }: { records: Record<ManageSection, AdminRecord[]> }) {
   const widgets = [
     {
       label: 'Total Projects',
@@ -377,7 +527,9 @@ function Overview() {
     },
     {
       label: 'New Leads',
-      value: records.submissions.filter((item) => item.status === 'New').length + records.contacts.filter((item) => item.status === 'New').length,
+      value:
+        records.inquiries.filter((item) => item.status === 'New').length +
+        records.messages.filter((item) => item.status === 'New').length,
       delta: '+8%',
       icon: FiInbox,
       tone: 'text-orange-500',
@@ -429,7 +581,7 @@ function Overview() {
             <div>
               <h2 className="font-semibold">Lead Velocity</h2>
               <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                Monthly inbound submissions and contacts
+                Monthly inbound inquiries and contact messages
               </p>
             </div>
             <FiActivity className="text-secondary" aria-hidden="true" />
@@ -466,35 +618,51 @@ function Overview() {
         </Panel>
       </div>
 
-      <ManagementTable embedded section="submissions" />
+      <ManagementTable
+        embedded
+        records={records.inquiries}
+        section="inquiries"
+        onCreate={() => undefined}
+        onDelete={() => undefined}
+        onUpdate={() => undefined}
+      />
     </div>
   )
 }
 
 function ManagementTable({
   embedded = false,
+  onCreate,
+  onDelete,
+  onUpdate,
+  records,
   section,
 }: {
   embedded?: boolean
-  section: Exclude<AdminSection, 'overview'>
+  onCreate: (record: AdminRecord) => void
+  onDelete: (id: string) => void
+  onUpdate: (record: AdminRecord) => void
+  records: AdminRecord[]
+  section: ManageSection
 }) {
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState('All')
   const [page, setPage] = useState(1)
+  const [modalMode, setModalMode] = useState<'create' | 'edit' | null>(null)
+  const [draft, setDraft] = useState<AdminRecord>(emptyRecord)
 
-  const sectionRecords = records[section]
   const statuses = useMemo(
-    () => ['All', ...Array.from(new Set(sectionRecords.map((item) => item.status)))],
-    [sectionRecords],
+    () => ['All', ...Array.from(new Set(records.map((item) => item.status)))],
+    [records],
   )
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase()
 
-    return sectionRecords.filter((item) => {
+    return records.filter((item) => {
       const matchesSearch =
         !query ||
-        [item.id, item.title, item.owner, item.category, item.status]
+        [item.id, item.title, item.owner, item.category, item.status, item.value]
           .join(' ')
           .toLowerCase()
           .includes(query)
@@ -502,20 +670,29 @@ function ManagementTable({
 
       return matchesSearch && matchesStatus
     })
-  }, [search, sectionRecords, status])
+  }, [records, search, status])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
   const currentPage = Math.min(page, totalPages)
   const visibleRows = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize)
 
-  function changeSearch(value: string) {
-    setSearch(value)
-    setPage(1)
+  function openCreate() {
+    const prefix = sectionPrefix(section)
+    setDraft({ ...emptyRecord, id: `${prefix}-${Math.floor(1000 + Math.random() * 8999)}` })
+    setModalMode('create')
   }
 
-  function changeStatus(value: string) {
-    setStatus(value)
-    setPage(1)
+  function openEdit(record: AdminRecord) {
+    setDraft(record)
+    setModalMode('edit')
+  }
+
+  function saveRecord(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    if (modalMode === 'create') onCreate(draft)
+    if (modalMode === 'edit') onUpdate(draft)
+    setModalMode(null)
   }
 
   return (
@@ -523,10 +700,10 @@ function ManagementTable({
       <div className={`${embedded ? '' : 'p-5'} flex flex-col gap-4 border-b border-slate-200 dark:border-white/10 lg:flex-row lg:items-center lg:justify-between`}>
         <div>
           <h2 className="font-semibold">
-            {embedded ? 'Latest Project Submissions' : sectionLabel(section)}
+            {embedded ? 'Latest Project Inquiries' : sectionLabel(section)}
           </h2>
           <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Search, filter, and review admin records.
+            CRUD operations with search, filters, and pagination.
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -537,14 +714,20 @@ function ManagementTable({
             />
             <input
               className="min-h-10 w-full rounded-[8px] border border-slate-200 bg-white pl-10 pr-3 text-sm outline-none transition focus:border-secondary focus:ring-4 focus:ring-secondary/15 dark:border-white/10 dark:bg-white/[0.04]"
-              onChange={(event) => changeSearch(event.target.value)}
+              onChange={(event) => {
+                setSearch(event.target.value)
+                setPage(1)
+              }}
               placeholder="Search records"
               value={search}
             />
           </label>
           <select
             className="min-h-10 rounded-[8px] border border-slate-200 bg-white px-3 text-sm font-semibold outline-none transition focus:border-secondary focus:ring-4 focus:ring-secondary/15 dark:border-white/10 dark:bg-[#11131a]"
-            onChange={(event) => changeStatus(event.target.value)}
+            onChange={(event) => {
+              setStatus(event.target.value)
+              setPage(1)
+            }}
             value={status}
           >
             {statuses.map((item) => (
@@ -553,11 +736,21 @@ function ManagementTable({
               </option>
             ))}
           </select>
+          {!embedded ? (
+            <button
+              className="inline-flex min-h-10 items-center justify-center rounded-[8px] bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-secondary hover:text-primary dark:bg-white dark:text-slate-950"
+              onClick={openCreate}
+              type="button"
+            >
+              <FiPlus className="mr-2" aria-hidden="true" />
+              Add
+            </button>
+          ) : null}
         </div>
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[760px] text-left text-sm">
+        <table className="w-full min-w-[860px] text-left text-sm">
           <thead className="text-xs uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             <tr className="border-b border-slate-200 dark:border-white/10">
               <th className="px-5 py-4 font-semibold">ID</th>
@@ -567,6 +760,7 @@ function ManagementTable({
               <th className="px-5 py-4 font-semibold">Status</th>
               <th className="px-5 py-4 font-semibold">Date</th>
               <th className="px-5 py-4 font-semibold">Value</th>
+              <th className="px-5 py-4 font-semibold">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -590,6 +784,24 @@ function ManagementTable({
                 </td>
                 <td className="px-5 py-4 text-slate-600 dark:text-slate-300">{item.date}</td>
                 <td className="px-5 py-4 font-semibold">{item.value}</td>
+                <td className="px-5 py-4">
+                  <div className="flex gap-2">
+                    <button
+                      className="grid h-9 w-9 place-items-center rounded-[8px] border border-slate-200 text-slate-600 transition hover:border-secondary hover:text-secondary dark:border-white/10 dark:text-slate-300"
+                      onClick={() => openEdit(item)}
+                      type="button"
+                    >
+                      <FiEdit3 aria-hidden="true" />
+                    </button>
+                    <button
+                      className="grid h-9 w-9 place-items-center rounded-[8px] border border-slate-200 text-slate-600 transition hover:border-red-300 hover:text-red-500 dark:border-white/10 dark:text-slate-300"
+                      onClick={() => onDelete(item.id)}
+                      type="button"
+                    >
+                      <FiTrash2 aria-hidden="true" />
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -622,6 +834,119 @@ function ManagementTable({
           </button>
         </div>
       </div>
+
+      {modalMode ? (
+        <div className="fixed inset-0 z-[70] grid place-items-center bg-slate-950/50 px-5 backdrop-blur">
+          <form
+            className="w-full max-w-2xl rounded-[16px] border border-slate-200 bg-white p-5 shadow-2xl dark:border-white/10 dark:bg-[#0d1017]"
+            onSubmit={saveRecord}
+          >
+            <div className="mb-5 flex items-center justify-between">
+              <h3 className="text-xl font-semibold">
+                {modalMode === 'create' ? 'Create' : 'Edit'} {sectionLabel(section)}
+              </h3>
+              <button
+                className="grid h-9 w-9 place-items-center rounded-[8px] border border-slate-200 dark:border-white/10"
+                onClick={() => setModalMode(null)}
+                type="button"
+              >
+                <FiX aria-hidden="true" />
+              </button>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(['id', 'title', 'owner', 'category', 'status', 'date', 'value'] as const).map((field) => (
+                <label className={field === 'title' ? 'sm:col-span-2' : ''} key={field}>
+                  <span className="text-sm font-semibold capitalize text-slate-600 dark:text-slate-300">
+                    {field}
+                  </span>
+                  <input
+                    className="mt-2 min-h-11 w-full rounded-[8px] border border-slate-200 bg-white px-3 outline-none transition focus:border-secondary focus:ring-4 focus:ring-secondary/15 dark:border-white/10 dark:bg-white/[0.04]"
+                    onChange={(event) => setDraft((current) => ({ ...current, [field]: event.target.value }))}
+                    type={field === 'date' ? 'date' : 'text'}
+                    value={draft[field]}
+                  />
+                </label>
+              ))}
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                className="min-h-10 rounded-[8px] border border-slate-200 px-4 text-sm font-semibold dark:border-white/10"
+                onClick={() => setModalMode(null)}
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                className="inline-flex min-h-10 items-center rounded-[8px] bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-secondary hover:text-primary dark:bg-white dark:text-slate-950"
+                type="submit"
+              >
+                <FiSave className="mr-2" aria-hidden="true" />
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      ) : null}
+    </Panel>
+  )
+}
+
+function SettingsPanel({
+  onSave,
+  settings,
+}: {
+  onSave: (settings: SettingsState) => void
+  settings: SettingsState
+}) {
+  const [draft, setDraft] = useState(settings)
+  const [saved, setSaved] = useState(false)
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    onSave(draft)
+    setSaved(true)
+    window.setTimeout(() => setSaved(false), 1800)
+  }
+
+  return (
+    <Panel className="p-5">
+      <form onSubmit={submit}>
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-xl font-semibold">Workspace Settings</h2>
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+              Configure admin defaults, notification routing, and lead response policy.
+            </p>
+          </div>
+          <FiSettings className="text-secondary" aria-hidden="true" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {Object.entries(draft).map(([key, value]) => (
+            <label key={key}>
+              <span className="text-sm font-semibold capitalize text-slate-600 dark:text-slate-300">
+                {key.replace(/([A-Z])/g, ' $1')}
+              </span>
+              <input
+                className="mt-2 min-h-11 w-full rounded-[8px] border border-slate-200 bg-white px-3 outline-none transition focus:border-secondary focus:ring-4 focus:ring-secondary/15 dark:border-white/10 dark:bg-white/[0.04]"
+                onChange={(event) =>
+                  setDraft((current) => ({ ...current, [key]: event.target.value }))
+                }
+                value={value}
+              />
+            </label>
+          ))}
+        </div>
+        <div className="mt-6 flex items-center gap-3">
+          <button
+            className="inline-flex min-h-10 items-center rounded-[8px] bg-slate-950 px-4 text-sm font-semibold text-white transition hover:bg-secondary hover:text-primary dark:bg-white dark:text-slate-950"
+            type="submit"
+          >
+            <FiSave className="mr-2" aria-hidden="true" />
+            Save settings
+          </button>
+          {saved ? <span className="text-sm font-semibold text-emerald-500">Settings saved</span> : null}
+        </div>
+      </form>
     </Panel>
   )
 }
@@ -643,8 +968,8 @@ function LineChart({ values }: { values: number[] }) {
       <svg className="h-full w-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 100 100">
         <defs>
           <linearGradient id="adminLine" x1="0" x2="1" y1="0" y2="0">
-            <stop offset="0%" stopColor="#00C8FF" />
-            <stop offset="100%" stopColor="#FF6B00" />
+            <stop offset="0%" stopColor="#075FD6" />
+            <stop offset="100%" stopColor="#256F00" />
           </linearGradient>
         </defs>
         <polyline fill="none" points={points} stroke="url(#adminLine)" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" />
@@ -652,7 +977,7 @@ function LineChart({ values }: { values: number[] }) {
           const x = (index / (values.length - 1)) * 100
           const y = 100 - ((value - min) / (max - min)) * 78 - 11
 
-          return <circle cx={x} cy={y} fill="#ffffff" key={String(index)} r="2.3" stroke="#00C8FF" strokeWidth="1.4" />
+          return <circle cx={x} cy={y} fill="#ffffff" key={String(index)} r="2.3" stroke="#075FD6" strokeWidth="1.4" />
         })}
       </svg>
     </div>
@@ -660,31 +985,33 @@ function LineChart({ values }: { values: number[] }) {
 }
 
 function StatusPill({ status }: { status: string }) {
-  const tone = statusTone(status)
-
-  return (
-    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${tone}`}>
-      {status}
-    </span>
-  )
+  return <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusTone(status)}`}>{status}</span>
 }
 
 function statusTone(status: string) {
-  if (['Active', 'Published', 'Approved', 'Qualified'].includes(status)) {
+  if (['Active', 'Published', 'Approved', 'Qualified', 'Delivered'].includes(status)) {
     return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
   }
 
-  if (['New', 'Pending', 'Review', 'Scheduled', 'Open'].includes(status)) {
+  if (['New', 'Pending', 'Review', 'Scheduled', 'Open', 'Contacted'].includes(status)) {
     return 'bg-orange-500/10 text-orange-600 dark:text-orange-400'
   }
 
   return 'bg-slate-500/10 text-slate-600 dark:text-slate-300'
 }
 
-function sectionLabel(section: Exclude<AdminSection, 'overview'>) {
-  const match = sections.find((item) => item.id === section)
+function sectionLabel(section: AdminSection) {
+  return sections.find((item) => item.id === section)?.label ?? 'Records'
+}
 
-  return match ? match.label : 'Records'
+function sectionPrefix(section: ManageSection) {
+  return {
+    blogs: 'BLG',
+    inquiries: 'INQ',
+    messages: 'MSG',
+    projects: 'PRJ',
+    testimonials: 'TST',
+  }[section]
 }
 
 function Panel({ children, className = '' }: { children: ReactNode; className?: string }) {

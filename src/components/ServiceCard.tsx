@@ -10,6 +10,7 @@ export function ServiceCard({
   gradient,
   href,
   icon: Icon,
+  image,
   title,
 }: Service) {
   return (
@@ -24,6 +25,14 @@ export function ServiceCard({
       <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-50 transition duration-500 group-hover:opacity-100`} />
       <div className="data-rain absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-20" />
       <div className="glass-panel relative flex h-full flex-col rounded-[22px] p-6">
+        <img
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute right-3 top-3 h-28 w-28 object-contain opacity-18 saturate-150 transition duration-500 group-hover:scale-110 group-hover:opacity-28 dark:opacity-22"
+          decoding="async"
+          loading="lazy"
+          src={image}
+        />
         <div className="mb-7 flex items-center justify-between">
           <div className={`relative grid h-14 w-14 place-items-center rounded-[16px] bg-gradient-to-br ${gradient} text-2xl text-white shadow-lg shadow-primary/15`}>
             <Icon aria-hidden="true" />

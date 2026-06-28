@@ -1,5 +1,6 @@
 import {
   useMemo,
+  useId,
   useState,
   type ChangeEvent,
   type DragEvent,
@@ -21,9 +22,9 @@ import {
   FiUploadCloud,
   FiUser,
 } from 'react-icons/fi'
-import { FaWhatsapp } from 'react-icons/fa'
 
 import { SEO } from '../components/SEO'
+import { submitContactForm, submitProjectSubmission } from '../services/api'
 
 type FormValues = {
   name: string
@@ -37,6 +38,16 @@ type FormValues = {
 }
 
 type FormErrors = Partial<Record<keyof FormValues | 'file', string>>
+
+type ContactValues = {
+  name: string
+  email: string
+  phone: string
+  subject: string
+  message: string
+}
+
+type ContactErrors = Partial<Record<keyof ContactValues, string>>
 
 const initialValues: FormValues = {
   name: '',
@@ -55,8 +66,8 @@ const categories = [
   'Robotics',
   'Embedded',
   'Automation',
-  'Electronics Product Development',
-  '3D Design / Printing',
+  'Electronics',
+  '3D Design',
 ]
 
 const budgets = [
@@ -136,6 +147,22 @@ function validateStep(step: number, values: FormValues, file: File | null) {
   return errors
 }
 
+function validateContact(values: ContactValues) {
+  const errors: ContactErrors = {}
+
+  if (!values.name.trim()) errors.name = 'Name is required.'
+  if (!/^\S+@\S+\.\S+$/.test(values.email)) errors.email = 'Enter a valid email address.'
+  if (values.phone && !/^[0-9+\-\s()]{8,}$/.test(values.phone)) {
+    errors.phone = 'Enter a valid phone number.'
+  }
+  if (values.subject.trim().length < 3) errors.subject = 'Subject is required.'
+  if (values.message.trim().length < 20) {
+    errors.message = 'Message must be at least 20 characters.'
+  }
+
+  return errors
+}
+
 export function Contact() {
   const [values, setValues] = useState<FormValues>(initialValues)
   const [file, setFile] = useState<File | null>(null)
@@ -144,6 +171,7 @@ export function Contact() {
   const [isDragging, setIsDragging] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState('')
 
   const steps = useMemo(
     () => [
@@ -192,22 +220,27 @@ export function Contact() {
     if (Object.keys(nextErrors).length > 0) return
 
     setIsSubmitting(true)
+    setSubmitError('')
 
-    const emailReadyPayload = {
-      ...values,
-      uploadedFile: file
-        ? {
-            name: file.name,
-            size: file.size,
-            type: file.type,
-          }
-        : null,
+    const formData = new FormData()
+    formData.append('name', values.name)
+    formData.append('email', values.email)
+    formData.append('phone', values.phone)
+    formData.append('project_title', values.projectTitle)
+    formData.append('project_category', values.projectCategory)
+    formData.append('budget', values.budget)
+    formData.append('expected_completion_date', values.expectedCompletionDate)
+    formData.append('description', values.description)
+    if (file) formData.append('file', file)
+
+    try {
+      await submitProjectSubmission(formData)
+      setIsSubmitted(true)
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Could not submit your project.')
+    } finally {
+      setIsSubmitting(false)
     }
-
-    await new Promise((resolve) => window.setTimeout(resolve, 900))
-    console.info('Project submission payload ready for email integration:', emailReadyPayload)
-    setIsSubmitting(false)
-    setIsSubmitted(true)
   }
 
   return (
@@ -219,16 +252,6 @@ export function Contact() {
       <section className="future-shell relative overflow-hidden px-5 py-20 sm:px-6 lg:px-8">
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,250,252,0.96),rgba(226,232,240,0.48),rgba(248,250,252,0.96))] dark:bg-[linear-gradient(180deg,#020617,#08162a_48%,#020617)]" />
         <div className="circuit-grid absolute inset-0 opacity-35 dark:opacity-20" />
-        <a
-          aria-label="Chat on WhatsApp"
-          className="fixed bottom-6 right-6 z-40 grid h-14 w-14 place-items-center rounded-full bg-[#25D366] text-2xl text-white shadow-2xl shadow-emerald-500/30 transition hover:-translate-y-1 hover:shadow-emerald-500/50"
-          href="https://wa.me/919876543210"
-          rel="noreferrer"
-          target="_blank"
-        >
-          <FaWhatsapp aria-hidden="true" />
-        </a>
-
         <div className="relative mx-auto max-w-7xl">
           <div className="mb-12 grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
             <div>
@@ -281,6 +304,7 @@ export function Contact() {
 
                   return (
                     <button
+                      aria-current={isActive ? 'step' : undefined}
                       className={`rounded-[8px] border p-3 text-left transition ${
                         isActive || isComplete
                           ? 'border-secondary bg-secondary/12 text-primary dark:text-white'
@@ -314,8 +338,8 @@ export function Contact() {
                       Project brief received
                     </h2>
                     <p className="mx-auto mt-4 max-w-md leading-8 text-slate-600 dark:text-slate-300">
-                      Your submission is ready for email delivery. We will review the brief
-                      and get back with scope, timeline, and next steps.
+                      Your submission was sent to the ProjectsforU backend. We will review
+                      the brief and get back with scope, timeline, and next steps.
                     </p>
                     <button
                       className="mt-8 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white transition hover:bg-secondary hover:text-primary dark:bg-secondary dark:text-primary dark:hover:bg-white"
@@ -336,6 +360,7 @@ export function Contact() {
                   {step === 0 ? (
                     <div className="grid gap-5">
                       <InputField
+                        autoComplete="name"
                         error={errors.name}
                         icon={<FiUser aria-hidden="true" />}
                         label="Name"
@@ -344,8 +369,10 @@ export function Contact() {
                         value={values.name}
                       />
                       <InputField
+                        autoComplete="email"
                         error={errors.email}
                         icon={<FiMail aria-hidden="true" />}
+                        inputMode="email"
                         label="Email"
                         onChange={(value) => updateValue('email', value)}
                         placeholder="you@example.com"
@@ -353,8 +380,10 @@ export function Contact() {
                         value={values.email}
                       />
                       <InputField
+                        autoComplete="tel"
                         error={errors.phone}
                         icon={<FiPhone aria-hidden="true" />}
+                        inputMode="tel"
                         label="Phone"
                         onChange={(value) => updateValue('phone', value)}
                         placeholder="+91 98765 43210"
@@ -392,6 +421,7 @@ export function Contact() {
                           error={errors.expectedCompletionDate}
                           icon={<FiCalendar aria-hidden="true" />}
                           label="Expected Completion Date"
+                          min={new Date().toISOString().slice(0, 10)}
                           onChange={(value) => updateValue('expectedCompletionDate', value)}
                           type="date"
                           value={values.expectedCompletionDate}
@@ -402,18 +432,22 @@ export function Contact() {
 
                   {step === 2 ? (
                     <div className="grid gap-5">
-                      <label>
+                      <label htmlFor="project-description">
                         <span className="text-sm font-semibold text-primary dark:text-white">
                           Description
                         </span>
                         <textarea
+                          aria-describedby={errors.description ? 'project-description-error' : undefined}
+                          aria-invalid={Boolean(errors.description)}
                           className="mt-2 min-h-40 w-full rounded-[8px] border border-primary/10 bg-white/80 px-4 py-3 text-primary outline-none transition placeholder:text-slate-400 focus:border-secondary focus:ring-4 focus:ring-secondary/15 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
+                          id="project-description"
                           onChange={(event) => updateValue('description', event.target.value)}
                           placeholder="Describe your objective, required features, sensors, hardware, software, references, and expected demo outcome."
+                          required
                           value={values.description}
                         />
                         {errors.description ? (
-                          <span className="mt-2 block text-sm font-semibold text-red-500">
+                          <span className="mt-2 block text-sm font-semibold text-red-500" id="project-description-error">
                             {errors.description}
                           </span>
                         ) : null}
@@ -432,7 +466,12 @@ export function Contact() {
                         }}
                         onDrop={handleDrop}
                       >
-                        <input className="sr-only" onChange={handleFileInput} type="file" />
+                        <input
+                          accept=".pdf,.png,.jpg,.jpeg,.webp,.zip,.doc,.docx,.ppt,.pptx"
+                          className="sr-only"
+                          onChange={handleFileInput}
+                          type="file"
+                        />
                         <FiUploadCloud className="text-4xl text-secondary" aria-hidden="true" />
                         <span className="mt-4 text-lg font-semibold text-primary dark:text-white">
                           {file ? file.name : 'Drag and drop your file here'}
@@ -450,6 +489,11 @@ export function Contact() {
                   ) : null}
 
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-between">
+                    {submitError ? (
+                      <p className="rounded-[8px] border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-semibold text-red-600 sm:mr-auto dark:text-red-300" role="alert">
+                        {submitError}
+                      </p>
+                    ) : null}
                     <button
                       className="inline-flex min-h-12 items-center justify-center rounded-full border border-primary/15 bg-white/70 px-6 text-sm font-semibold text-primary transition hover:border-secondary hover:bg-secondary/10 disabled:cursor-not-allowed disabled:opacity-40 dark:border-white/15 dark:bg-white/5 dark:text-white"
                       disabled={step === 0 || isSubmitting}
@@ -491,6 +535,8 @@ export function Contact() {
             </form>
 
             <div className="grid gap-6">
+              <ContactMessageForm />
+
               <div className="glass-panel overflow-hidden rounded-[24px]">
                 <iframe
                   className="h-72 w-full border-0"
@@ -550,38 +596,201 @@ export function Contact() {
 }
 
 type InputFieldProps = {
+  autoComplete?: string
   error?: string
   icon?: ReactNode
+  inputMode?: 'email' | 'numeric' | 'tel' | 'text' | 'url'
   label: string
+  min?: string
   onChange: (value: string) => void
   placeholder?: string
+  required?: boolean
   type?: string
   value: string
 }
 
+function ContactMessageForm() {
+  const [values, setValues] = useState<ContactValues>({
+    email: '',
+    message: '',
+    name: '',
+    phone: '',
+    subject: '',
+  })
+  const [errors, setErrors] = useState<ContactErrors>({})
+  const [isSending, setIsSending] = useState(false)
+  const [status, setStatus] = useState<{ tone: 'success' | 'error'; message: string } | null>(null)
+
+  function updateValue(field: keyof ContactValues, value: string) {
+    setValues((current) => ({ ...current, [field]: value }))
+    setErrors((current) => ({ ...current, [field]: undefined }))
+    setStatus(null)
+  }
+
+  async function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const nextErrors = validateContact(values)
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) return
+
+    setIsSending(true)
+    setStatus(null)
+
+    try {
+      await submitContactForm({
+        email: values.email,
+        message: values.message,
+        name: values.name,
+        phone: values.phone || undefined,
+        subject: values.subject,
+      })
+      setValues({ email: '', message: '', name: '', phone: '', subject: '' })
+      setStatus({
+        tone: 'success',
+        message: 'Message sent successfully. We will reply soon.',
+      })
+    } catch (error) {
+      setStatus({
+        tone: 'error',
+        message: error instanceof Error ? error.message : 'Could not send your message.',
+      })
+    } finally {
+      setIsSending(false)
+    }
+  }
+
+  return (
+    <form className="glass-panel rounded-[24px] p-6" onSubmit={handleContactSubmit}>
+      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
+        Contact Message
+      </p>
+      <h2 className="mt-3 text-2xl font-semibold text-primary dark:text-white">
+        Ask a quick question
+      </h2>
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <InputField
+          autoComplete="name"
+          error={errors.name}
+          label="Name"
+          onChange={(value) => updateValue('name', value)}
+          placeholder="Your name"
+          value={values.name}
+        />
+        <InputField
+          autoComplete="email"
+          error={errors.email}
+          inputMode="email"
+          label="Email"
+          onChange={(value) => updateValue('email', value)}
+          placeholder="you@example.com"
+          type="email"
+          value={values.email}
+        />
+        <InputField
+          autoComplete="tel"
+          error={errors.phone}
+          inputMode="tel"
+          label="Phone"
+          onChange={(value) => updateValue('phone', value)}
+          placeholder="+91 98765 43210"
+          required={false}
+          value={values.phone}
+        />
+        <InputField
+          error={errors.subject}
+          label="Subject"
+          onChange={(value) => updateValue('subject', value)}
+          placeholder="Consultation request"
+          value={values.subject}
+        />
+      </div>
+      <label className="mt-4 block" htmlFor="contact-message">
+        <span className="text-sm font-semibold text-primary dark:text-white">Message</span>
+        <textarea
+          aria-describedby={errors.message ? 'contact-message-error' : undefined}
+          aria-invalid={Boolean(errors.message)}
+          className="mt-2 min-h-32 w-full rounded-[8px] border border-primary/10 bg-white/80 px-4 py-3 text-primary outline-none transition placeholder:text-slate-400 focus:border-secondary focus:ring-4 focus:ring-secondary/15 dark:border-white/10 dark:bg-white/[0.06] dark:text-white"
+          id="contact-message"
+          onChange={(event) => updateValue('message', event.target.value)}
+          placeholder="Tell us what you need help with."
+          required
+          value={values.message}
+        />
+        {errors.message ? (
+          <span className="mt-2 block text-sm font-semibold text-red-500" id="contact-message-error">
+            {errors.message}
+          </span>
+        ) : null}
+      </label>
+      {status ? (
+        <p
+          role={status.tone === 'error' ? 'alert' : 'status'}
+          className={`mt-4 rounded-[8px] border px-4 py-3 text-sm font-semibold ${
+            status.tone === 'success'
+              ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+              : 'border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-300'
+          }`}
+        >
+          {status.message}
+        </p>
+      ) : null}
+      <button
+        className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-xl shadow-primary/20 transition hover:bg-secondary hover:text-primary disabled:cursor-wait disabled:opacity-70 dark:bg-secondary dark:text-primary dark:hover:bg-white"
+        disabled={isSending}
+        type="submit"
+      >
+        {isSending ? (
+          <>
+            <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white dark:border-primary/30 dark:border-t-primary" />
+            Sending
+          </>
+        ) : (
+          <>
+            Send Message <FiSend className="ml-2" aria-hidden="true" />
+          </>
+        )}
+      </button>
+    </form>
+  )
+}
+
 function InputField({
+  autoComplete,
   error,
   icon,
+  inputMode,
   label,
+  min,
   onChange,
   placeholder,
+  required = true,
   type = 'text',
   value,
 }: InputFieldProps) {
+  const inputId = useId()
+  const errorId = `${inputId}-error`
+
   return (
-    <label>
+    <label htmlFor={inputId}>
       <span className="text-sm font-semibold text-primary dark:text-white">{label}</span>
       <span className="mt-2 flex items-center rounded-[8px] border border-primary/10 bg-white/80 px-4 text-primary transition focus-within:border-secondary focus-within:ring-4 focus-within:ring-secondary/15 dark:border-white/10 dark:bg-white/[0.06] dark:text-white">
         {icon ? <span className="mr-3 text-secondary">{icon}</span> : null}
         <input
+          aria-describedby={error ? errorId : undefined}
+          aria-invalid={Boolean(error)}
+          autoComplete={autoComplete}
           className="min-h-12 w-full bg-transparent outline-none placeholder:text-slate-400"
+          id={inputId}
+          inputMode={inputMode}
+          min={min}
           onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
+          required={required}
           type={type}
           value={value}
         />
       </span>
-      {error ? <span className="mt-2 block text-sm font-semibold text-red-500">{error}</span> : null}
+      {error ? <span className="mt-2 block text-sm font-semibold text-red-500" id={errorId}>{error}</span> : null}
     </label>
   )
 }
@@ -595,12 +804,19 @@ type SelectFieldProps = {
 }
 
 function SelectField({ error, label, onChange, options, value }: SelectFieldProps) {
+  const selectId = useId()
+  const errorId = `${selectId}-error`
+
   return (
-    <label>
+    <label htmlFor={selectId}>
       <span className="text-sm font-semibold text-primary dark:text-white">{label}</span>
       <select
+        aria-describedby={error ? errorId : undefined}
+        aria-invalid={Boolean(error)}
         className="mt-2 min-h-12 w-full rounded-[8px] border border-primary/10 bg-white/80 px-4 text-primary outline-none transition focus:border-secondary focus:ring-4 focus:ring-secondary/15 dark:border-white/10 dark:bg-slate-900 dark:text-white"
+        id={selectId}
         onChange={(event) => onChange(event.target.value)}
+        required
         value={value}
       >
         <option value="">Select {label.toLowerCase()}</option>
@@ -610,7 +826,7 @@ function SelectField({ error, label, onChange, options, value }: SelectFieldProp
           </option>
         ))}
       </select>
-      {error ? <span className="mt-2 block text-sm font-semibold text-red-500">{error}</span> : null}
+      {error ? <span className="mt-2 block text-sm font-semibold text-red-500" id={errorId}>{error}</span> : null}
     </label>
   )
 }

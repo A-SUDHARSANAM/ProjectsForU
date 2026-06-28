@@ -1,18 +1,34 @@
 import { motion } from 'framer-motion'
 
+import { BrandLogo } from './BrandLogo'
+
 export function LoadingScreen() {
   return (
-    <div className="grid min-h-screen place-items-center bg-background text-primary dark:bg-slate-950 dark:text-white">
+    <div className="grid min-h-screen place-items-center bg-background px-5 text-primary dark:bg-slate-950 dark:text-white">
       <motion.div
-        className="flex items-center gap-3"
+        className="glass-panel w-full max-w-3xl rounded-[28px] p-6"
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.35 }}
       >
-        <span className="h-4 w-4 rounded-full bg-secondary shadow-[0_0_32px_rgba(0,200,255,0.9)]" />
-        <span className="text-sm font-semibold uppercase tracking-[0.24em]">
-          ProjectsforU
-        </span>
+        <div className="flex items-center gap-3">
+          <BrandLogo
+            markClassName="h-11 w-11 rounded-[12px] shadow-lg shadow-primary/15"
+            wordmarkClassName="h-10 w-48"
+          />
+        </div>
+        <div className="mt-6 grid gap-4">
+          <span className="h-8 animate-pulse rounded-full bg-primary/10 dark:bg-white/10" />
+          <span className="h-24 animate-pulse rounded-[18px] bg-primary/10 dark:bg-white/10" />
+          <div className="grid gap-3 sm:grid-cols-3">
+            {Array.from({ length: 3 }, (_, index) => (
+              <span
+                className="h-24 animate-pulse rounded-[18px] bg-primary/10 dark:bg-white/10"
+                key={String(index)}
+              />
+            ))}
+          </div>
+        </div>
       </motion.div>
     </div>
   )

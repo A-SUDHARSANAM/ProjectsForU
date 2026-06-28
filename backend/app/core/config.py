@@ -1,7 +1,7 @@
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import AnyHttpUrl, EmailStr, Field, field_validator
+from pydantic import AnyHttpUrl, EmailStr, Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -23,6 +23,18 @@ class Settings(BaseSettings):
 
     upload_dir: Path = Path("uploads")
     max_upload_size_mb: int = 10
+    allowed_upload_extensions: set[str] = {
+        ".doc",
+        ".docx",
+        ".jpeg",
+        ".jpg",
+        ".pdf",
+        ".png",
+        ".ppt",
+        ".pptx",
+        ".webp",
+        ".zip",
+    }
 
     smtp_host: str | None = None
     smtp_port: int = 587
@@ -30,6 +42,11 @@ class Settings(BaseSettings):
     smtp_password: str | None = None
     smtp_from_email: EmailStr | None = None
     admin_notification_email: EmailStr | None = None
+
+    cloudinary_cloud_name: str | None = None
+    cloudinary_api_key: str | None = None
+    cloudinary_api_secret: str | None = None
+    cloudinary_folder: str = "projectsforu"
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -44,6 +61,23 @@ class Settings(BaseSettings):
         if isinstance(value, str) and value:
             return [origin.strip() for origin in value.split(",")]
         return value
+
+    @field_validator("allowed_upload_extensions", mode="before")
+    @classmethod
+    def parse_allowed_upload_extensions(cls, value: str | set[str]) -> set[str] | str:
+        if isinstance(value, str) and value:
+            return {
+                extension if extension.startswith(".") else f".{extension}"
+                for extension in (item.strip().lower() for item in value.split(","))
+                if extension
+            }
+        return value
+
+    @model_validator(mode="after")
+    def validate_production_security(self) -> "Settings":
+        if self.app_env.lower() == "production" and self.jwt_secret_key == "change-me-in-production":
+            raise ValueError("JWT_SECRET_KEY must be changed before running in production.")
+        return self
 
 
 @lru_cache

@@ -99,6 +99,8 @@ export function TestimonialsSection() {
                       <img
                         alt={`${testimonial.name} profile`}
                         className="h-14 w-14 rounded-[16px] border border-white/20 object-cover shadow-lg shadow-black/20"
+                        decoding="async"
+                        loading="lazy"
                         src={avatarFor(testimonial)}
                       />
                       <div>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 140" fill="none">
+  <path d="M28 112V28h58c23 0 38 14 38 35 0 22-15 36-38 36H54v13H28Z" fill="#061B3D"/>
+  <path d="M54 76h30c9 0 14-5 14-13 0-7-5-12-14-12H54v25Z" fill="#fff"/>
+  <path d="M29 103V73c0-10 8-18 18-18h22" stroke="#061B3D" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M47 55h36" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="29" cy="103" r="7" fill="#fff" stroke="#061B3D" stroke-width="5"/>
+  <circle cx="47" cy="55" r="7" fill="#fff" stroke="#061B3D" stroke-width="5"/>
+  <circle cx="83" cy="55" r="9" fill="#12AEEF"/>
+  <path d="M29 103v24M56 86v41M85 98v23" stroke="#061B3D" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="29" cy="129" r="8" fill="#fff" stroke="#061B3D" stroke-width="5"/>
+  <circle cx="56" cy="129" r="8" fill="#fff" stroke="#061B3D" stroke-width="5"/>
+  <circle cx="85" cy="123" r="8" fill="#fff" stroke="#061B3D" stroke-width="5"/>
+  <text x="138" y="95" fill="#061B3D" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800" letter-spacing="-4">Projects</text>
+  <text x="458" y="95" fill="#12AEEF" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800" letter-spacing="-4">for</text>
+  <path d="M593 38v48c0 25 18 43 43 43s43-18 43-43V38" stroke="#FF6B00" stroke-width="24" stroke-linecap="round"/>
+  <path d="M615 90c6 9 13 13 21 13s16-4 22-13" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="593" cy="25" r="13" fill="#FF6B00"/>
+  <circle cx="679" cy="25" r="13" fill="#FF6B00"/>
+</svg>

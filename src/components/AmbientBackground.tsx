@@ -3,17 +3,29 @@ import { useEffect } from 'react'
 export function AmbientBackground() {
   useEffect(() => {
     const root = document.documentElement
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let animationFrame = 0
 
     function handlePointerMove(event: PointerEvent) {
-      const x = `${Math.round((event.clientX / window.innerWidth) * 100)}%`
-      const y = `${Math.round((event.clientY / window.innerHeight) * 100)}%`
-      root.style.setProperty('--spot-x', x)
-      root.style.setProperty('--spot-y', y)
+      if (animationFrame) return
+
+      animationFrame = window.requestAnimationFrame(() => {
+        const x = `${Math.round((event.clientX / window.innerWidth) * 100)}%`
+        const y = `${Math.round((event.clientY / window.innerHeight) * 100)}%`
+        root.style.setProperty('--spot-x', x)
+        root.style.setProperty('--spot-y', y)
+        animationFrame = 0
+      })
     }
+
+    if (prefersReducedMotion) return undefined
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true })
 
-    return () => window.removeEventListener('pointermove', handlePointerMove)
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove)
+      if (animationFrame) window.cancelAnimationFrame(animationFrame)
+    }
   }, [])
 
   return (

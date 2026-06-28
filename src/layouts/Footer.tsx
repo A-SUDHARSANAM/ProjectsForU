@@ -1,6 +1,7 @@
 import { FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
+import { BrandLogo } from '../components/BrandLogo'
 import { navItems } from '../services/siteContent'
 
 export function Footer() {
@@ -9,11 +10,11 @@ export function Footer() {
       <div className="absolute inset-0 bg-primary/92 dark:bg-slate-950/92" />
       <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
         <div>
-          <Link className="flex items-center gap-3" to="/">
-            <span className="premium-border grid h-10 w-10 place-items-center rounded-[12px] bg-secondary text-sm font-black text-primary">
-              PU
-            </span>
-            <span className="text-lg font-bold">ProjectsforU</span>
+          <Link
+            className="inline-flex rounded-[14px] bg-white/96 px-3 py-2 shadow-xl shadow-black/15 transition hover:-translate-y-0.5"
+            to="/"
+          >
+            <BrandLogo variant="wordmark" tone="light" className="h-12 w-60" />
           </Link>
           <p className="mt-5 max-w-md leading-7 text-slate-300">
             A technology product development company building fast, elegant, and

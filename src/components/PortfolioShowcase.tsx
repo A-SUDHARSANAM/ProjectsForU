@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { FiArrowUpRight, FiCpu, FiLayers, FiRadio, FiX } from 'react-icons/fi'
 
 import { portfolioProjects } from '../services/siteContent'
@@ -32,6 +32,24 @@ export function PortfolioShowcase() {
     () => portfolioProjects.filter((project) => projectMatchesCategory(project, activeCategory)),
     [activeCategory],
   )
+
+  useEffect(() => {
+    if (!selectedProject) return undefined
+
+    const previousOverflow = document.body.style.overflow
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') setSelectedProject(null)
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedProject])
 
   return (
     <section className="future-shell relative overflow-hidden px-5 py-20 sm:px-6 lg:px-8">
@@ -136,6 +154,7 @@ export function PortfolioShowcase() {
       {selectedProject ? (
         <div
           aria-modal="true"
+          aria-labelledby="project-modal-title"
           className="fixed inset-0 z-50 grid place-items-center bg-primary/70 px-5 py-8 backdrop-blur-xl dark:bg-black/78"
           onClick={() => setSelectedProject(null)}
           role="dialog"
@@ -163,7 +182,7 @@ export function PortfolioShowcase() {
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
                   {selectedProject.category} Case Study
                 </p>
-                <h3 className="mt-3 text-3xl font-semibold text-white sm:text-4xl">
+                <h3 className="mt-3 text-3xl font-semibold text-white sm:text-4xl" id="project-modal-title">
                   {selectedProject.title}
                 </h3>
               </div>

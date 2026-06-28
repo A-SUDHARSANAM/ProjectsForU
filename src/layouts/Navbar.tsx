@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { FiChevronDown, FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi'
+import { FiChevronDown, FiLock, FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 
+import { BrandLogo } from '../components/BrandLogo'
 import { useTheme } from '../hooks/useTheme'
 import { navItems, serviceNavItems } from '../services/siteContent'
 import { cn } from '../utils/cn'
@@ -51,13 +52,10 @@ export function Navbar() {
       >
         <Link
           to="/"
-          className="group flex items-center gap-3 text-primary dark:text-white"
+          className="group flex min-w-0 items-center text-primary dark:text-white"
           onClick={() => setOpen(false)}
         >
-          <span className="premium-border grid h-10 w-10 place-items-center rounded-[12px] bg-primary text-sm font-black text-secondary shadow-lg shadow-primary/20 transition duration-300 group-hover:rotate-3 group-hover:shadow-secondary/25 dark:bg-white dark:text-primary">
-            PU
-          </span>
-          <span className="text-lg font-bold tracking-tight">ProjectsforU</span>
+          <BrandLogo variant="header" className="h-11 w-44 transition duration-300 group-hover:scale-[1.02] sm:w-52" />
         </Link>
 
         <div className="hidden items-center gap-1 rounded-full border border-primary/10 bg-white/42 p-1 dark:border-white/10 dark:bg-white/[0.035] lg:flex">
@@ -95,15 +93,29 @@ export function Navbar() {
                     >
                       {serviceNavItems.map((service) => (
                         <Link
-                          className="group block rounded-[12px] px-4 py-3 transition hover:bg-secondary/10 dark:hover:bg-white/10"
+                          className="group grid grid-cols-[3.25rem_1fr] items-center gap-3 rounded-[12px] px-3 py-3 transition hover:bg-secondary/10 dark:hover:bg-white/10"
                           key={service.label}
                           to={service.href}
                         >
-                          <span className="block text-sm font-semibold text-primary transition group-hover:text-secondary dark:text-white">
-                            {service.label}
-                          </span>
-                          <span className="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">
-                            Explore capability
+                          {service.image ? (
+                            <span className="grid h-12 w-12 place-items-center rounded-[12px] border border-primary/10 bg-white/70 dark:border-white/10 dark:bg-white/[0.05]">
+                              <img
+                                alt=""
+                                aria-hidden="true"
+                                className="h-10 w-10 object-contain transition duration-300 group-hover:scale-110"
+                                decoding="async"
+                                loading="lazy"
+                                src={service.image}
+                              />
+                            </span>
+                          ) : null}
+                          <span>
+                            <span className="block text-sm font-semibold text-primary transition group-hover:text-secondary dark:text-white">
+                              {service.label}
+                            </span>
+                            <span className="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">
+                              {service.description ?? 'Explore capability'}
+                            </span>
                           </span>
                         </Link>
                       ))}
@@ -120,6 +132,14 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <Link
+            aria-label="Admin login"
+            className="glass-panel grid h-10 w-10 place-items-center rounded-full text-primary transition hover:-translate-y-0.5 hover:border-secondary hover:text-secondary dark:text-white"
+            title="Admin login"
+            to="/admin"
+          >
+            <FiLock aria-hidden="true" />
+          </Link>
           <button
             aria-label="Toggle dark mode"
             className="glass-panel grid h-10 w-10 place-items-center rounded-full text-primary transition hover:-translate-y-0.5 hover:border-secondary hover:text-secondary dark:text-white"
@@ -192,10 +212,20 @@ export function Navbar() {
                         >
                           {serviceNavItems.map((service) => (
                             <Link
-                              className="block rounded-[8px] px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-secondary/10 hover:text-secondary dark:text-slate-300"
+                              className="flex items-center gap-3 rounded-[8px] px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-secondary/10 hover:text-secondary dark:text-slate-300"
                               key={service.label}
                               to={service.href}
                             >
+                              {service.image ? (
+                                <img
+                                  alt=""
+                                  aria-hidden="true"
+                                  className="h-8 w-8 object-contain"
+                                  decoding="async"
+                                  loading="lazy"
+                                  src={service.image}
+                                />
+                              ) : null}
                               {service.label}
                             </Link>
                           ))}
@@ -210,6 +240,13 @@ export function Navbar() {
                 )
               ))}
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                <Link
+                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-primary/15 bg-white/70 px-5 text-sm font-semibold text-primary transition hover:border-secondary hover:text-secondary dark:border-white/10 dark:bg-white/5 dark:text-white"
+                  to="/admin"
+                >
+                  <FiLock className="mr-2" aria-hidden="true" />
+                  Admin Login
+                </Link>
                 <Link
                   className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-white transition hover:bg-secondary hover:text-primary dark:bg-secondary dark:text-primary"
                   to="/contact"

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" fill="none">
+  <circle cx="160" cy="160" r="146" fill="white"/>
+  <path d="M160 14a146 146 0 0 1 143 174" stroke="#12AEEF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M303 188A146 146 0 0 1 78 285" stroke="#FF6B00" stroke-width="10" stroke-linecap="round"/>
+  <path d="M78 285A146 146 0 0 1 160 14" stroke="#061B3D" stroke-width="10" stroke-linecap="round"/>
+  <image href="/brand/logo-wordmark.svg" x="34" y="95" width="252" height="86" preserveAspectRatio="xMidYMid meet"/>
+  <text x="83" y="224" fill="#061B3D" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" letter-spacing="5">LEARN</text>
+  <circle cx="145" cy="219" r="4" fill="#12AEEF"/>
+  <text x="159" y="224" fill="#12AEEF" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" letter-spacing="5">DESIGN</text>
+  <circle cx="235" cy="219" r="4" fill="#FF6B00"/>
+  <text x="248" y="224" fill="#FF6B00" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800" letter-spacing="5">BUILD</text>
+</svg>

@@ -1,110 +1,70 @@
-import {
-  FiBookOpen,
-  FiBox,
-  FiCpu,
-  FiGitBranch,
-  FiLayers,
-  FiRadio,
-  FiRepeat,
-  FiZap,
-} from 'react-icons/fi'
-
 import type {
   CaseStudy,
   NavItem,
   PortfolioProject,
   ProcessStep,
-  Service,
   Testimonial,
 } from '../types/site'
+
+export { serviceDetails, services } from './services'
 
 export const navItems: NavItem[] = [
   { label: 'About', href: '/about' },
   { label: 'Services', href: '/services' },
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Blog', href: '/blog' },
+  { label: 'Submit Project', href: '/project-submission' },
   { label: 'Contact', href: '/contact' },
 ]
 
 export const serviceNavItems: NavItem[] = [
-  { label: 'Electronics Product Development', href: '/services' },
-  { label: 'Robotics & Automation', href: '/services' },
-  { label: 'IoT Solutions', href: '/services' },
-  { label: 'Embedded Systems', href: '/services' },
-]
-
-export const services: Service[] = [
   {
-    title: 'Electronics Product Development',
-    description:
-      'Concept-to-prototype circuit design, PCB planning, component selection, testing, and product-ready validation.',
-    icon: FiCpu,
-    cta: 'Learn More',
-    href: '/contact',
-    gradient: 'from-secondary via-cyan-300 to-blue-500',
+    label: 'Electronics Product Development',
+    href: '/services/electronics-product-development',
+    image: '/service-visuals/electronics.svg',
+    description: 'PCB, circuits, testing',
   },
   {
-    title: 'Robotics & Automation',
-    description:
-      'Smart robotic systems, automation workflows, control logic, motion systems, and practical machine integration.',
-    icon: FiRepeat,
-    cta: 'Learn More',
-    href: '/contact',
-    gradient: 'from-accent via-amber-300 to-secondary',
+    label: 'Robotics & Automation',
+    href: '/services/robotics-automation',
+    image: '/service-visuals/robotics.svg',
+    description: 'Motion, control, workflows',
   },
   {
-    title: 'IoT Solutions',
-    description:
-      'Connected devices, sensor networks, wireless communication, dashboards, and data pipelines for real-world systems.',
-    icon: FiRadio,
-    cta: 'Learn More',
-    href: '/contact',
-    gradient: 'from-emerald-400 via-secondary to-cyan-500',
+    label: 'IoT Solutions',
+    href: '/services/iot-solutions',
+    image: '/service-visuals/iot.svg',
+    description: 'Sensors, telemetry, dashboards',
   },
   {
-    title: 'Embedded Systems',
-    description:
-      'Firmware, microcontroller programming, hardware interfaces, power-aware design, and reliable device behavior.',
-    icon: FiGitBranch,
-    cta: 'Learn More',
-    href: '/contact',
-    gradient: 'from-violet-400 via-secondary to-blue-500',
+    label: 'Embedded Systems',
+    href: '/services/embedded-systems',
+    image: '/service-visuals/embedded.svg',
+    description: 'Firmware, devices, interfaces',
   },
   {
-    title: 'AI & Machine Learning',
-    description:
-      'Computer vision, predictive models, intelligent automation, edge AI experiments, and data-backed prototypes.',
-    icon: FiZap,
-    cta: 'Learn More',
-    href: '/contact',
-    gradient: 'from-secondary via-indigo-400 to-accent',
+    label: 'AI & Machine Learning',
+    href: '/services/ai-machine-learning',
+    image: '/service-visuals/ai.svg',
+    description: 'Vision, models, edge AI',
   },
   {
-    title: '3D CAD Design',
-    description:
-      'Precise enclosures, mechanisms, assemblies, product housings, and manufacturable CAD models for prototypes.',
-    icon: FiLayers,
-    cta: 'Learn More',
-    href: '/contact',
-    gradient: 'from-sky-400 via-secondary to-emerald-300',
+    label: '3D CAD Design',
+    href: '/services/3d-cad-design',
+    image: '/service-visuals/cad.svg',
+    description: 'Enclosures, models, assemblies',
   },
   {
-    title: '3D Printing',
-    description:
-      'Rapid physical prototypes, functional parts, test fixtures, iterations, and print-ready design optimization.',
-    icon: FiBox,
-    cta: 'Learn More',
-    href: '/contact',
-    gradient: 'from-accent via-rose-400 to-secondary',
+    label: '3D Printing',
+    href: '/services/3d-printing',
+    image: '/service-visuals/printing.svg',
+    description: 'Rapid prototypes, fixtures',
   },
   {
-    title: 'Technical Training',
-    description:
-      'Hands-on learning for students and teams across electronics, robotics, IoT, embedded systems, AI, and prototyping.',
-    icon: FiBookOpen,
-    cta: 'Learn More',
-    href: '/contact',
-    gradient: 'from-primary via-blue-500 to-secondary',
+    label: 'Technical Training',
+    href: '/services/technical-training-mentorship',
+    image: '/service-visuals/training.svg',
+    description: 'Mentorship, demos, learning',
   },
 ]
 
