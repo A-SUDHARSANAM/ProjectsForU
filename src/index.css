@@ -108,14 +108,14 @@
   }
 
   .glass-panel {
-    border: 1px solid rgba(15, 23, 42, 0.09);
+    border: 1px solid rgba(15, 23, 42, 0.13);
     background:
-      linear-gradient(145deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.48)),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.08));
+      linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.88)),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(241, 245, 249, 0.68));
     box-shadow:
-      0 24px 70px rgba(7, 17, 31, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.72);
-    backdrop-filter: blur(24px) saturate(1.5);
+      0 22px 64px rgba(7, 17, 31, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px) saturate(1.35);
   }
 
   .dark .glass-panel {
@@ -246,6 +246,90 @@
   .spotlight-mask {
     mask-image: radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 50%), black, transparent 68%);
   }
+
+  #root main :is(h1, h2) {
+    color: transparent !important;
+    background:
+      linear-gradient(96deg, #07111f 0%, #0b3f83 24%, #075fd6 46%, #087c8f 64%, #256f00 100%);
+    background-size: 240% auto;
+    background-clip: text;
+    text-shadow: 0 14px 34px rgba(7, 95, 214, 0.12);
+    animation: premium-text-flow 8s ease-in-out infinite;
+  }
+
+  .dark #root main :is(h1, h2) {
+    background:
+      linear-gradient(96deg, #ffffff 0%, #b8e8ff 24%, #00d4ff 48%, #a3ff12 72%, #ffffff 100%);
+    background-size: 240% auto;
+    background-clip: text;
+    text-shadow:
+      0 0 22px rgba(0, 212, 255, 0.2),
+      0 18px 42px rgba(0, 0, 0, 0.34);
+  }
+
+  #root main h3 {
+    color: transparent !important;
+    background: linear-gradient(105deg, #10213a 0%, #075fd6 55%, #1f6f3b 100%);
+    background-size: 190% auto;
+    background-clip: text;
+    text-shadow: 0 10px 24px rgba(7, 95, 214, 0.09);
+    animation: premium-text-flow 10s ease-in-out infinite;
+  }
+
+  .dark #root main h3 {
+    background: linear-gradient(105deg, #ffffff 0%, #74dcff 52%, #c9ff5b 100%);
+    background-size: 190% auto;
+    background-clip: text;
+    text-shadow: 0 0 18px rgba(0, 212, 255, 0.16);
+  }
+
+  #root main :is(p, li, summary) strong,
+  #root main .text-secondary {
+    text-shadow: 0 0 18px rgba(7, 95, 214, 0.18);
+  }
+
+  .dark #root main :is(p, li, summary) strong,
+  .dark #root main .text-secondary {
+    text-shadow: 0 0 22px rgba(0, 212, 255, 0.28);
+  }
+
+  .text-spark-flow {
+    color: transparent;
+    background: linear-gradient(90deg, #075fd6, #00d4ff, #256f00, #ff6b00, #075fd6);
+    background-size: 260% auto;
+    background-clip: text;
+    filter: drop-shadow(0 0 16px rgba(0, 212, 255, 0.16));
+    animation: premium-text-flow 6s ease-in-out infinite;
+  }
+
+  .brand-logo-link {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+  }
+
+  .brand-logo-link::after {
+    position: absolute;
+    inset: -35% -28%;
+    pointer-events: none;
+    content: "";
+    background: linear-gradient(115deg, transparent 34%, rgba(7, 95, 214, 0.14) 48%, transparent 62%);
+    opacity: 0;
+    transform: translateX(-70%) rotate(8deg);
+  }
+
+  .brand-logo-link:hover::after {
+    animation: logo-shine 900ms ease-out;
+  }
+
+  .dark .brand-logo-link::after {
+    background: linear-gradient(115deg, transparent 34%, rgba(255, 255, 255, 0.5) 48%, transparent 62%);
+  }
+
+  .brand-logo-animated {
+    transform-origin: center;
+    animation: logo-breathe 5.5s ease-in-out infinite;
+  }
 }
 
 @keyframes typing-caret {
@@ -304,6 +388,46 @@
 
   to {
     background-position: 0 360px, 180px 0;
+  }
+}
+
+@keyframes premium-text-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes logo-breathe {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(0, 212, 255, 0));
+    transform: translateY(0);
+  }
+
+  50% {
+    filter: drop-shadow(0 8px 18px rgba(0, 212, 255, 0.12));
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes logo-shine {
+  0% {
+    opacity: 0;
+    transform: translateX(-70%) rotate(8deg);
+  }
+
+  22% {
+    opacity: 0.75;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(72%) rotate(8deg);
   }
 }
 

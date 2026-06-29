@@ -22,13 +22,13 @@ export function ServiceCard({
       whileHover={{ y: -8, scale: 1.015 }}
       whileInView={{ opacity: 1, y: 0 }}
     >
-      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-50 transition duration-500 group-hover:opacity-100`} />
-      <div className="data-rain absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-20" />
+      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-[0.32] transition duration-500 group-hover:opacity-[0.52] dark:opacity-50 dark:group-hover:opacity-100`} />
+      <div className="data-rain absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-10 dark:group-hover:opacity-20" />
       <div className="glass-panel relative flex h-full flex-col rounded-[22px] p-6">
         <img
           alt=""
           aria-hidden="true"
-          className="pointer-events-none absolute right-3 top-3 h-28 w-28 object-contain opacity-18 saturate-150 transition duration-500 group-hover:scale-110 group-hover:opacity-28 dark:opacity-22"
+          className="pointer-events-none absolute right-3 top-3 h-28 w-28 object-contain opacity-12 saturate-150 transition duration-500 group-hover:scale-110 group-hover:opacity-20 dark:opacity-22 dark:group-hover:opacity-28"
           decoding="async"
           loading="lazy"
           src={image}
@@ -55,7 +55,7 @@ export function ServiceCard({
         <h3 className="text-xl font-semibold tracking-tight text-[#142033] dark:text-white">
           {title}
         </h3>
-        <p className="mt-3 flex-1 leading-7 text-[#4a5870] dark:text-slate-300">
+        <p className="mt-3 flex-1 leading-7 text-[#34445f] dark:text-slate-300">
           {description}
         </p>
         <Link

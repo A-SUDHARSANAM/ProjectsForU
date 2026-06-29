@@ -64,9 +64,9 @@ export function ServiceDetail({ next, previous, service }: ServiceDetailProps) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.45, delay: 0.08, ease: 'easeOut' }}
           >
-            <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-18`} />
-            <div className="data-rain absolute inset-0 opacity-10" />
-            <div className="relative grid min-h-[22rem] place-items-center rounded-[24px] border border-white/10 bg-white/42 dark:bg-white/[0.04]">
+            <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-12 dark:opacity-18`} />
+            <div className="data-rain absolute inset-0 opacity-5 dark:opacity-10" />
+            <div className="relative grid min-h-[22rem] place-items-center rounded-[24px] border border-primary/10 bg-white/86 dark:border-white/10 dark:bg-white/[0.04]">
               <img
                 alt={`${service.title} illustration`}
                 className="h-56 w-56 object-contain drop-shadow-2xl sm:h-72 sm:w-72"

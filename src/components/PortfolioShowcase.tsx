@@ -130,13 +130,13 @@ export function PortfolioShowcase() {
                     <h3 className="mt-3 text-2xl font-semibold leading-tight text-[#142033] dark:text-white">
                       {project.title}
                     </h3>
-                    <p className="mt-4 leading-7 text-[#4a5870] dark:text-slate-300">
+                    <p className="mt-4 leading-7 text-[#34445f] dark:text-slate-300">
                       {project.summary}
                     </p>
                     <div className="mt-5 flex flex-wrap gap-2">
                       {project.tags.slice(0, 4).map((tag) => (
                         <span
-                          className="rounded-full border border-primary/10 bg-primary/[0.035] px-3 py-1 text-xs font-semibold text-slate-600 dark:border-white/10 dark:bg-white/[0.06] dark:text-slate-300"
+                          className="rounded-full border border-primary/10 bg-white/82 px-3 py-1 text-xs font-semibold text-[#34445f] dark:border-white/10 dark:bg-white/[0.06] dark:text-slate-300"
                           key={tag}
                         >
                           {tag}

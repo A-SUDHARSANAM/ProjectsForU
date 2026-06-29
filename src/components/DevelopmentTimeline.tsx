@@ -57,6 +57,7 @@ export function DevelopmentTimeline() {
           eyebrow="Development Process Timeline"
           title="A clear path from idea to deployed solution"
           description="An interactive development flow keeps every build practical, visible, and ready for the next decision."
+          tone="dark"
         />
 
         <div className="relative mt-14 hidden lg:block">

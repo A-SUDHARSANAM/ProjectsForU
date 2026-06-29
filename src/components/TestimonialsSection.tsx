@@ -91,7 +91,7 @@ export function TestimonialsSection() {
             <div className="flex min-w-max animate-testimonial-scroll gap-5 pr-5 group-hover:[animation-play-state:paused]">
               {sliderItems.map((testimonial, index) => (
                 <article
-                  className="glass-panel w-[min(84vw,22rem)] rounded-[22px] p-5 text-white transition duration-300 hover:-translate-y-1 hover:border-secondary/40 sm:w-[25rem]"
+                  className="w-[min(84vw,22rem)] rounded-[22px] border border-white/10 bg-[#0d1726] p-5 text-white shadow-2xl shadow-black/25 transition duration-300 hover:-translate-y-1 hover:border-secondary/40 dark:bg-[#0b1220] sm:w-[25rem]"
                   key={`${testimonial.name}-${index}`}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -119,7 +119,7 @@ export function TestimonialsSection() {
                       <FaStar key={String(starIndex)} aria-hidden="true" />
                     ))}
                   </div>
-                  <p className="mt-5 min-h-36 text-base leading-8 text-slate-200">
+                  <p className="mt-5 min-h-36 text-base leading-8 text-slate-100">
                     "{testimonial.review}"
                   </p>
                   <div className="mt-6 inline-flex rounded-full border border-white/10 bg-white/[0.07] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-secondary">

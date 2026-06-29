@@ -80,7 +80,7 @@ export function HeroVisual() {
         <div className="grid gap-3 sm:grid-cols-3">
           {dashboardMetrics.map((metric, index) => (
             <motion.div
-              className="rounded-[16px] border border-primary/10 bg-white/66 p-3 dark:border-white/10 dark:bg-slate-950/52"
+              className="rounded-[16px] border border-primary/10 bg-white/90 p-3 shadow-sm shadow-slate-950/5 dark:border-white/10 dark:bg-slate-950/52 dark:shadow-none"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 + index * 0.1 }}
@@ -118,7 +118,7 @@ export function HeroVisual() {
               ))}
             </div>
           </div>
-          <div className="relative rounded-[18px] border border-primary/10 bg-white/72 p-4 dark:border-white/10 dark:bg-slate-950/52">
+          <div className="relative rounded-[18px] border border-primary/10 bg-white/90 p-4 shadow-sm shadow-slate-950/5 dark:border-white/10 dark:bg-slate-950/52 dark:shadow-none">
             <div className="absolute inset-0 rounded-[18px] bg-[linear-gradient(90deg,rgba(0,200,255,0.1)_1px,transparent_1px),linear-gradient(180deg,rgba(0,200,255,0.1)_1px,transparent_1px)] bg-[size:18px_18px]" />
             <div className="relative grid h-full place-items-center">
               <motion.div

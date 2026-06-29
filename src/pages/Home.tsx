@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import {
   FiArrowDown,
   FiArrowRight,
@@ -21,10 +22,10 @@ import { caseStudies, services } from '../services/siteContent'
 
 export function Home() {
   const stats = [
-    { value: '100+', label: 'Projects shipped' },
-    { value: '50+', label: 'Clients guided' },
-    { value: '10+', label: 'Core stacks' },
-    { value: '24/7', label: 'Build support' },
+    { value: 100, suffix: '+', label: 'Projects shipped' },
+    { value: 50, suffix: '+', label: 'Clients guided' },
+    { value: 10, suffix: '+', label: 'Core stacks' },
+    { value: 24, suffix: '/7', label: 'Build support' },
   ]
 
   const floatingIcons = [
@@ -130,26 +131,19 @@ export function Home() {
                 Explore Work
               </ButtonLink>
             </div>
-            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {stats.map((stat, index) => (
-                <motion.div
-                  className="glass-panel micro-lift rounded-[18px] p-4"
-                  initial={{ opacity: 0, y: 18 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.45 + index * 0.08, duration: 0.45 }}
-                  key={stat.label}
-                >
-                  <p className="text-2xl font-semibold text-primary dark:text-white">
-                    {stat.value}
-                  </p>
-                  <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
-                    {stat.label}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
           <HeroVisual />
+          <div className="mx-auto grid w-full max-w-3xl grid-cols-2 gap-3 lg:col-span-2 lg:-mt-8 sm:grid-cols-4">
+            {stats.map((stat, index) => (
+              <AnimatedStatCard
+                index={index}
+                key={stat.label}
+                label={stat.label}
+                suffix={stat.suffix}
+                value={stat.value}
+              />
+            ))}
+          </div>
         </div>
         <motion.a
           aria-label="Scroll to capabilities"
@@ -191,7 +185,7 @@ export function Home() {
           <div className="grid gap-5 lg:grid-cols-3">
             {caseStudies.map((study) => (
               <motion.article
-                className="glass-panel micro-lift rounded-[22px] p-6 text-white"
+                className="glass-panel micro-lift rounded-[22px] p-6 text-primary dark:text-white"
                 initial={{ opacity: 0, y: 22 }}
                 key={study.title}
                 transition={{ duration: 0.45, ease: 'easeOut' }}
@@ -202,9 +196,9 @@ export function Home() {
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-secondary">
                   {study.company}
                 </p>
-                <h3 className="mt-4 text-2xl font-semibold">{study.title}</h3>
-                <p className="mt-4 leading-7 text-slate-300">{study.description}</p>
-                <p className="mt-8 text-3xl font-semibold text-white">{study.metric}</p>
+                <h3 className="mt-4 text-2xl font-semibold text-[#142033] dark:text-white">{study.title}</h3>
+                <p className="mt-4 leading-7 text-[#34445f] dark:text-slate-300">{study.description}</p>
+                <p className="mt-8 text-3xl font-semibold text-primary dark:text-white">{study.metric}</p>
               </motion.article>
             ))}
           </div>
@@ -213,5 +207,89 @@ export function Home() {
 
       <DevelopmentTimeline />
     </>
+  )
+}
+
+function AnimatedStatCard({
+  index,
+  label,
+  suffix,
+  value,
+}: {
+  index: number
+  label: string
+  suffix: string
+  value: number
+}) {
+  const [displayValue, setDisplayValue] = useState(0)
+  const [isRolling, setIsRolling] = useState(false)
+  const cardRef = useRef<HTMLDivElement | null>(null)
+  const canRollRef = useRef(true)
+
+  useEffect(() => {
+    const card = cardRef.current
+    if (!card) return undefined
+    let rollInterval = 0
+    let stopTimeout = 0
+
+    function roll() {
+      if (!canRollRef.current) return
+
+      canRollRef.current = false
+      setIsRolling(true)
+      const maxRoll = value >= 100 ? 999 : 99
+
+      rollInterval = window.setInterval(() => {
+        setDisplayValue(Math.floor(Math.random() * (maxRoll + 1)))
+      }, 58)
+
+      stopTimeout = window.setTimeout(() => {
+        window.clearInterval(rollInterval)
+        setDisplayValue(value)
+        setIsRolling(false)
+      }, 980 + index * 90)
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          roll()
+          return
+        }
+
+        canRollRef.current = true
+      },
+      { threshold: 0.35 },
+    )
+
+    observer.observe(card)
+
+    return () => {
+      observer.disconnect()
+      window.clearInterval(rollInterval)
+      window.clearTimeout(stopTimeout)
+    }
+  }, [index, value])
+
+  return (
+    <motion.div
+      className="glass-panel micro-lift rounded-[18px] p-4 text-center"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.45 + index * 0.08, duration: 0.45 }}
+      ref={cardRef}
+    >
+      <p
+        className={`font-mono text-2xl font-semibold tabular-nums text-primary transition duration-150 dark:text-white ${
+          isRolling ? 'scale-105 blur-[0.3px] text-secondary' : ''
+        }`}
+      >
+        <span className="inline-block min-w-[3ch]">{displayValue}</span>
+        <span>{suffix}</span>
+      </p>
+      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-600 dark:text-slate-400">
+        {label}
+      </p>
+    </motion.div>
   )
 }

@@ -31,6 +31,7 @@ export function Navbar() {
   }, [pathname])
 
   const isServicesActive = pathname.startsWith('/services')
+  const visibleNavItems = navItems.filter((item) => item.label !== 'Submit Project')
 
   return (
     <motion.header
@@ -46,23 +47,30 @@ export function Navbar() {
     >
       <nav
         className={cn(
-          'glass-panel mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full px-3 transition duration-300 sm:px-4 lg:px-5',
-          scrolled && 'shadow-2xl shadow-primary/10 dark:shadow-black/40',
+          'premium-border relative mx-auto flex min-h-16 max-w-6xl items-center justify-between gap-4 rounded-[26px] border border-white/70 bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(248,250,252,0.88)_52%,rgba(239,246,255,0.82))] px-4 shadow-[0_18px_55px_rgba(7,17,31,0.12),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-2xl transition duration-300 sm:px-5 dark:border-white/10 dark:bg-[linear-gradient(135deg,rgba(8,14,27,0.92),rgba(11,18,32,0.86)_52%,rgba(4,11,22,0.92))] dark:shadow-[0_22px_70px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,255,255,0.08)]',
+          scrolled && 'bg-[linear-gradient(135deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94)_52%,rgba(239,246,255,0.9))] shadow-[0_20px_70px_rgba(7,17,31,0.16),inset_0_1px_0_rgba(255,255,255,0.95)] dark:bg-[linear-gradient(135deg,rgba(8,14,27,0.96),rgba(11,18,32,0.92)_52%,rgba(4,11,22,0.96))]',
         )}
       >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-10 -bottom-px h-px bg-gradient-to-r from-transparent via-secondary/70 to-transparent opacity-80"
+        />
         <Link
           to="/"
-          className="group flex min-w-0 items-center text-primary dark:text-white"
+          className="brand-logo-link group flex min-w-0 items-center text-primary dark:text-white"
           onClick={() => setOpen(false)}
         >
-          <BrandLogo variant="header" className="h-11 w-44 transition duration-300 group-hover:scale-[1.02] sm:w-52" />
+          <BrandLogo
+            variant="wordmark"
+            className="brand-logo-animated h-[3.25rem] w-60 transition duration-300 group-hover:scale-[1.02] sm:h-14 sm:w-[19rem] lg:w-72 xl:w-80"
+          />
         </Link>
 
-        <div className="hidden items-center gap-1 rounded-full border border-primary/10 bg-white/42 p-1 dark:border-white/10 dark:bg-white/[0.035] lg:flex">
+        <div className="hidden items-center gap-1 rounded-full border border-primary/10 bg-white/88 p-1 shadow-inner shadow-slate-950/5 dark:border-white/10 dark:bg-white/[0.045] dark:shadow-none lg:flex">
           <NavLink className={desktopLinkClass} to="/">
             Home
           </NavLink>
-          {navItems.map((item) => (
+          {visibleNavItems.map((item) => (
             item.label === 'Services' ? (
               <div
                 className="relative"
@@ -86,19 +94,19 @@ export function Navbar() {
                   {servicesOpen ? (
                     <motion.div
                       animate={{ opacity: 1, y: 0, scale: 1 }}
-                      className="glass-panel absolute left-1/2 top-12 w-80 -translate-x-1/2 rounded-[16px] p-2"
+                      className="absolute left-1/2 top-12 w-[21.5rem] -translate-x-1/2 rounded-[16px] border border-slate-200 bg-white p-2 shadow-2xl shadow-slate-950/18 ring-1 ring-black/5 dark:border-white/10 dark:bg-[#0b1220] dark:shadow-black/55 dark:ring-white/10"
                       exit={{ opacity: 0, y: 8, scale: 0.98 }}
                       initial={{ opacity: 0, y: 8, scale: 0.98 }}
                       transition={{ duration: 0.18, ease: 'easeOut' }}
                     >
                       {serviceNavItems.map((service) => (
                         <Link
-                          className="group grid grid-cols-[3.25rem_1fr] items-center gap-3 rounded-[12px] px-3 py-3 transition hover:bg-secondary/10 dark:hover:bg-white/10"
+                          className="group grid grid-cols-[3.25rem_1fr] items-center gap-3 rounded-[12px] px-3 py-3 transition hover:bg-slate-100 focus:bg-slate-100 focus:outline-none dark:hover:bg-white/[0.08] dark:focus:bg-white/[0.08]"
                           key={service.label}
                           to={service.href}
                         >
                           {service.image ? (
-                            <span className="grid h-12 w-12 place-items-center rounded-[12px] border border-primary/10 bg-white/70 dark:border-white/10 dark:bg-white/[0.05]">
+                            <span className="grid h-12 w-12 place-items-center rounded-[12px] border border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.06]">
                               <img
                                 alt=""
                                 aria-hidden="true"
@@ -113,7 +121,7 @@ export function Navbar() {
                             <span className="block text-sm font-semibold text-primary transition group-hover:text-secondary dark:text-white">
                               {service.label}
                             </span>
-                            <span className="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">
+                            <span className="mt-1 block text-xs leading-5 text-slate-600 dark:text-slate-300">
                               {service.description ?? 'Explore capability'}
                             </span>
                           </span>
@@ -148,18 +156,6 @@ export function Navbar() {
           >
             {theme === 'dark' ? <FiSun aria-hidden="true" /> : <FiMoon aria-hidden="true" />}
           </button>
-          <Link
-            className="glass-panel hidden min-h-10 items-center rounded-full px-5 text-sm font-semibold text-primary transition hover:-translate-y-0.5 hover:border-secondary/60 hover:text-secondary dark:text-white md:inline-flex"
-            to="/contact"
-          >
-            Free Consultation
-          </Link>
-          <Link
-            className="scanline hidden min-h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-white shadow-lg shadow-primary/15 transition hover:-translate-y-0.5 hover:bg-secondary hover:text-primary dark:bg-white dark:text-primary dark:hover:bg-secondary sm:inline-flex"
-            to="/contact"
-          >
-            Start Project
-          </Link>
           <button
             aria-label="Toggle navigation"
             className="glass-panel grid h-10 w-10 place-items-center rounded-full text-primary lg:hidden dark:text-white"
@@ -184,7 +180,7 @@ export function Navbar() {
               <NavLink className={mobileLinkClass} to="/">
                 Home
               </NavLink>
-              {navItems.map((item) => (
+              {visibleNavItems.map((item) => (
                 item.label === 'Services' ? (
                   <div key={item.href}>
                     <button
@@ -246,18 +242,6 @@ export function Navbar() {
                 >
                   <FiLock className="mr-2" aria-hidden="true" />
                   Admin Login
-                </Link>
-                <Link
-                  className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-white transition hover:bg-secondary hover:text-primary dark:bg-secondary dark:text-primary"
-                  to="/contact"
-                >
-                  Start Project
-                </Link>
-                <Link
-                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-primary/15 bg-white/70 px-5 text-sm font-semibold text-primary transition hover:border-secondary hover:text-secondary dark:border-white/10 dark:bg-white/5 dark:text-white"
-                  to="/contact"
-                >
-                  Free Consultation
                 </Link>
               </div>
             </div>
