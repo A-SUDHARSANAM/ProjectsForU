@@ -112,8 +112,10 @@ export function Navbar() {
                                 aria-hidden="true"
                                 className="h-10 w-10 object-contain transition duration-300 group-hover:scale-110"
                                 decoding="async"
+                                height="40"
                                 loading="lazy"
                                 src={service.image}
+                                width="40"
                               />
                             </span>
                           ) : null}
@@ -218,8 +220,10 @@ export function Navbar() {
                                   aria-hidden="true"
                                   className="h-8 w-8 object-contain"
                                   decoding="async"
+                                  height="32"
                                   loading="lazy"
                                   src={service.image}
+                                  width="32"
                                 />
                               ) : null}
                               {service.label}

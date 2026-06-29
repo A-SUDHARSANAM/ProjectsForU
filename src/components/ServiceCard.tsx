@@ -15,26 +15,42 @@ export function ServiceCard({
 }: Service) {
   return (
     <motion.article
-      className="group premium-border relative overflow-hidden rounded-[22px] bg-gradient-to-br p-px shadow-xl shadow-primary/5 transition duration-300 dark:shadow-black/25"
+      className="group premium-border relative min-h-[27rem] overflow-hidden rounded-[22px] bg-primary shadow-xl shadow-primary/10 transition duration-300 dark:shadow-black/30"
       initial={{ opacity: 0, y: 22 }}
       transition={{ duration: 0.45, ease: 'easeOut' }}
       viewport={{ once: true, margin: '-80px' }}
       whileHover={{ y: -8, scale: 1.015 }}
       whileInView={{ opacity: 1, y: 0 }}
     >
-      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-[0.32] transition duration-500 group-hover:opacity-[0.52] dark:opacity-50 dark:group-hover:opacity-100`} />
+      <img
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full scale-110 object-cover opacity-80 blur-[2px] brightness-110 saturate-[0.85] transition duration-700 group-hover:scale-[1.15] group-hover:opacity-90"
+        decoding="async"
+        height="360"
+        loading="lazy"
+        src={image}
+        width="520"
+      />
+      <img
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 h-full w-full object-contain p-3 brightness-[1.15] contrast-105 transition duration-700 group-hover:scale-[1.04]"
+        decoding="async"
+        height="360"
+        loading="lazy"
+        src={image}
+        width="520"
+      />
+      <div className="absolute inset-0 bg-primary/18 transition duration-500 group-hover:bg-primary/10 dark:bg-black/20 dark:group-hover:bg-black/12" />
+      <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-10 mix-blend-multiply transition duration-500 group-hover:opacity-[0.06] dark:opacity-[0.14] dark:mix-blend-screen dark:group-hover:opacity-10`} />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,17,31,0.04)_0%,rgba(7,17,31,0.18)_48%,rgba(7,17,31,0.78)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_18%,rgba(255,255,255,0.2),transparent_0_32%),radial-gradient(circle_at_82%_12%,rgba(255,255,255,0.12),transparent_0_28%)] opacity-60" />
       <div className="data-rain absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-10 dark:group-hover:opacity-20" />
-      <div className="glass-panel relative flex h-full flex-col rounded-[22px] p-6">
-        <img
-          alt=""
-          aria-hidden="true"
-          className="pointer-events-none absolute right-3 top-3 h-28 w-28 object-contain opacity-12 saturate-150 transition duration-500 group-hover:scale-110 group-hover:opacity-20 dark:opacity-22 dark:group-hover:opacity-28"
-          decoding="async"
-          loading="lazy"
-          src={image}
-        />
-        <div className="mb-7 flex items-center justify-between">
-          <div className={`relative grid h-14 w-14 place-items-center rounded-[16px] bg-gradient-to-br ${gradient} text-2xl text-white shadow-lg shadow-primary/15`}>
+
+      <div className="relative flex h-full min-h-[27rem] flex-col justify-end p-5">
+        <div className="mb-auto flex items-center justify-between">
+          <div className={`relative grid h-14 w-14 place-items-center rounded-[16px] bg-gradient-to-br ${gradient} text-2xl text-white shadow-lg shadow-black/20 ring-1 ring-white/25 backdrop-blur-sm`}>
             <Icon aria-hidden="true" />
             <svg
               aria-hidden="true"
@@ -50,24 +66,27 @@ export function ServiceCard({
               />
             </svg>
           </div>
-          <span className="h-2 w-2 rounded-full bg-secondary shadow-[0_0_18px_rgba(0,200,255,0.9)]" />
+          <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_18px_rgba(255,255,255,0.85)]" />
         </div>
-        <h3 className="text-xl font-semibold tracking-tight text-[#142033] dark:text-white">
-          {title}
-        </h3>
-        <p className="mt-3 flex-1 leading-7 text-[#34445f] dark:text-slate-300">
-          {description}
-        </p>
-        <Link
-          className="mt-7 inline-flex items-center text-sm font-semibold text-primary transition hover:text-secondary dark:text-white dark:hover:text-secondary"
-          to={href}
-        >
-          {cta}
-          <FiArrowRight
-            className="ml-2 transition duration-300 group-hover:translate-x-1"
-            aria-hidden="true"
-          />
-        </Link>
+
+        <div className="rounded-[18px] border border-white/18 bg-primary/46 p-5 shadow-2xl shadow-black/25 backdrop-blur-md transition duration-500 group-hover:bg-primary/40 dark:bg-black/40 dark:group-hover:bg-black/34">
+          <h3 className="text-xl font-semibold tracking-tight text-white">
+            {title}
+          </h3>
+          <p className="mt-3 flex-1 leading-7 text-white/88">
+            {description}
+          </p>
+          <Link
+            className="mt-6 inline-flex items-center rounded-full border border-white/20 bg-white/14 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/40 hover:bg-white/22"
+            to={href}
+          >
+            {cta}
+            <FiArrowRight
+              className="ml-2 transition duration-300 group-hover:translate-x-1"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
       </div>
     </motion.article>
   )

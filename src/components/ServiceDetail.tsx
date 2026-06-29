@@ -64,17 +64,22 @@ export function ServiceDetail({ next, previous, service }: ServiceDetailProps) {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.45, delay: 0.08, ease: 'easeOut' }}
           >
-            <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-12 dark:opacity-18`} />
-            <div className="data-rain absolute inset-0 opacity-5 dark:opacity-10" />
-            <div className="relative grid min-h-[22rem] place-items-center rounded-[24px] border border-primary/10 bg-white/86 dark:border-white/10 dark:bg-white/[0.04]">
+            <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-[0.04] dark:opacity-[0.08]`} />
+            <div className="data-rain absolute inset-0 opacity-[0.02] dark:opacity-[0.04]" />
+            <div className="relative min-h-[22rem] overflow-hidden rounded-[24px] border border-primary/10 bg-primary/10 dark:border-white/10 dark:bg-white/[0.03]">
               <img
                 alt={`${service.title} illustration`}
-                className="h-56 w-56 object-contain drop-shadow-2xl sm:h-72 sm:w-72"
+                className="absolute inset-0 h-full w-full object-cover brightness-[1.14] contrast-105 saturate-[1.04]"
                 decoding="async"
+                fetchPriority="high"
+                height="360"
                 loading="eager"
                 src={service.image}
+                width="560"
               />
-              <div className={`absolute left-6 top-6 grid h-16 w-16 place-items-center rounded-[18px] bg-gradient-to-br ${service.gradient} text-3xl text-white shadow-xl shadow-primary/20`}>
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,17,31,0.04),rgba(7,17,31,0.08)_52%,rgba(7,17,31,0.28))]" />
+              <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-[0.08] mix-blend-screen`} />
+              <div className={`absolute left-6 top-6 grid h-16 w-16 place-items-center rounded-[18px] bg-gradient-to-br ${service.gradient} text-3xl text-white shadow-xl shadow-primary/20 ring-1 ring-white/30`}>
                 <Icon aria-hidden="true" />
               </div>
             </div>

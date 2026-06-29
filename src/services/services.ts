@@ -36,7 +36,7 @@ export const serviceDetails: ServiceDetailContent[] = [
     cta: 'Learn More',
     href: '/services/electronics-product-development',
     gradient: 'from-secondary via-cyan-300 to-blue-500',
-    image: '/service-visuals/electronics.svg',
+    image: '/service-visuals/electronic%20product%20development.jpg',
     features: [
       { title: 'Circuit Architecture', description: 'Block diagrams, signal flow, power paths, and component-level planning.', icon: FiCpu },
       { title: 'PCB Readiness', description: 'Layout guidance, connector strategy, footprints, and board bring-up support.', icon: FiGitBranch },
@@ -79,7 +79,7 @@ export const serviceDetails: ServiceDetailContent[] = [
     cta: 'Learn More',
     href: '/services/robotics-automation',
     gradient: 'from-accent via-amber-300 to-secondary',
-    image: '/service-visuals/robotics.svg',
+    image: '/service-visuals/roboticsautomation.jpg',
     features: [
       { title: 'Motion Control', description: 'Motor selection, control loops, movement logic, and path behavior.', icon: FiRepeat },
       { title: 'Automation Logic', description: 'Task sequencing, state machines, I/O coordination, and process flow.', icon: FiSettings },
@@ -122,7 +122,7 @@ export const serviceDetails: ServiceDetailContent[] = [
     cta: 'Learn More',
     href: '/services/iot-solutions',
     gradient: 'from-emerald-400 via-secondary to-cyan-500',
-    image: '/service-visuals/iot.svg',
+    image: '/service-visuals/IOT%20solutions.jpg',
     features: [
       { title: 'Sensor Networks', description: 'Device planning, sensor calibration, and reliable field data capture.', icon: FiRadio },
       { title: 'Telemetry Pipeline', description: 'MQTT, HTTP, packet structure, data routing, and backend readiness.', icon: FiDatabase },
@@ -165,7 +165,7 @@ export const serviceDetails: ServiceDetailContent[] = [
     cta: 'Learn More',
     href: '/services/embedded-systems',
     gradient: 'from-violet-400 via-secondary to-blue-500',
-    image: '/service-visuals/embedded.svg',
+    image: '/service-visuals/embedded%20systems.jpg',
     features: [
       { title: 'Firmware Logic', description: 'State machines, timing, interrupts, drivers, and robust device behavior.', icon: FiGitBranch },
       { title: 'Hardware Interfaces', description: 'Sensors, actuators, serial communication, displays, and modules.', icon: FiCpu },
@@ -208,7 +208,7 @@ export const serviceDetails: ServiceDetailContent[] = [
     cta: 'Learn More',
     href: '/services/ai-machine-learning',
     gradient: 'from-secondary via-indigo-400 to-accent',
-    image: '/service-visuals/ai.svg',
+    image: '/service-visuals/AIML.jpg',
     features: [
       { title: 'Computer Vision', description: 'Image capture, preprocessing, detection, classification, and review flows.', icon: FiMonitor },
       { title: 'Model Prototypes', description: 'Prediction workflows, model integration, and evaluation-ready outputs.', icon: FiZap },
@@ -251,7 +251,7 @@ export const serviceDetails: ServiceDetailContent[] = [
     cta: 'Learn More',
     href: '/services/3d-cad-design',
     gradient: 'from-sky-400 via-secondary to-emerald-300',
-    image: '/service-visuals/cad.svg',
+    image: '/service-visuals/3D%20CADD%20Design.jpg',
     features: [
       { title: 'Product Enclosures', description: 'Housings, mounting points, ports, clearances, and device packaging.', icon: FiBox },
       { title: 'Mechanism Design', description: 'Moving parts, assemblies, brackets, fixtures, and functional geometry.', icon: FiSettings },
@@ -294,7 +294,7 @@ export const serviceDetails: ServiceDetailContent[] = [
     cta: 'Learn More',
     href: '/services/3d-printing',
     gradient: 'from-accent via-rose-400 to-secondary',
-    image: '/service-visuals/printing.svg',
+    image: '/service-visuals/3d%20printinng.jpg',
     features: [
       { title: 'Rapid Prototypes', description: 'Fast physical models for demos, validation, and design decisions.', icon: FiBox },
       { title: 'Functional Parts', description: 'Brackets, fixtures, housings, adapters, and practical test components.', icon: FiTool },
@@ -337,7 +337,7 @@ export const serviceDetails: ServiceDetailContent[] = [
     cta: 'Learn More',
     href: '/services/technical-training-mentorship',
     gradient: 'from-primary via-blue-500 to-secondary',
-    image: '/service-visuals/training.svg',
+    image: '/service-visuals/technical%20training%20and%20mentorship.jpg',
     features: [
       { title: 'Guided Project Builds', description: 'Step-by-step learning around real project architecture and implementation.', icon: FiBookOpen },
       { title: 'Concept Clarity', description: 'Explain hardware, firmware, data, and design decisions in plain language.', icon: FiMonitor },
