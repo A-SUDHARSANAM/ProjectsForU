@@ -186,7 +186,7 @@ export function ServiceDetail({ next, previous, service }: ServiceDetailProps) {
                 whileInView={{ opacity: 1, y: 0 }}
               >
                 <div className="mb-5 flex items-center justify-between">
-                  <span className="grid h-11 w-11 place-items-center rounded-[14px] bg-primary text-sm font-black text-secondary dark:bg-white dark:text-primary">
+                  <span className="grid h-11 w-11 place-items-center rounded-[14px] bg-secondary/14 text-sm font-black text-secondary">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   <FiLayers className="text-secondary" aria-hidden="true" />

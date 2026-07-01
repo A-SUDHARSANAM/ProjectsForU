@@ -57,7 +57,7 @@ export function TestimonialsSection() {
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.24em] text-secondary">
               Testimonials
             </p>
-            <h2 className="text-3xl font-semibold tracking-tight text-[#07111f] dark:text-white sm:text-5xl">
+            <h2 className="text-3xl font-semibold tracking-tight text-[#07111f] sm:text-5xl dark:text-white">
               Trusted by learners, founders, and industry teams
             </h2>
             <p className="mt-5 text-base leading-8 text-[#34445f] dark:text-slate-300">
@@ -71,7 +71,7 @@ export function TestimonialsSection() {
                 aria-pressed={activeCategory === category}
                 className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
                   activeCategory === category
-                    ? 'border-secondary bg-secondary text-white dark:text-primary shadow-lg shadow-secondary/20'
+                    ? 'border-secondary bg-secondary text-white shadow-lg shadow-secondary/20 dark:text-primary'
                     : 'border-primary/10 bg-white/70 text-slate-600 hover:border-secondary/70 hover:text-primary dark:border-white/10 dark:bg-white/[0.06] dark:text-slate-300 dark:hover:text-white'
                 }`}
                 key={category}
@@ -91,14 +91,14 @@ export function TestimonialsSection() {
             <div className="flex min-w-max animate-testimonial-scroll gap-5 pr-5 group-hover:[animation-play-state:paused]">
               {sliderItems.map((testimonial, index) => (
                 <article
-                  className="glass-panel w-[min(84vw,22rem)] rounded-[22px] p-5 text-primary dark:text-white transition duration-300 hover:-translate-y-1 hover:border-secondary/40 sm:w-[25rem]"
+                  className="glass-panel w-[min(84vw,22rem)] rounded-[22px] p-5 text-primary transition duration-300 hover:-translate-y-1 hover:border-secondary/40 sm:w-[25rem] dark:text-white"
                   key={`${testimonial.name}-${index}`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <img
                         alt={`${testimonial.name} profile`}
-                        className="h-14 w-14 rounded-[16px] border border-primary/10 dark:border-white/20 object-cover shadow-lg shadow-slate-950/[0.04] dark:shadow-black/20"
+                        className="h-14 w-14 rounded-[16px] border border-primary/10 object-cover shadow-lg shadow-slate-950/[0.04] dark:border-white/20 dark:shadow-black/20"
                         decoding="async"
                         loading="lazy"
                         src={avatarFor(testimonial)}
@@ -122,7 +122,7 @@ export function TestimonialsSection() {
                   <p className="mt-5 min-h-36 text-base leading-8 text-[#34445f] dark:text-slate-300">
                     "{testimonial.review}"
                   </p>
-                  <div className="mt-6 inline-flex rounded-full border border-primary/10 bg-primary/5 dark:border-white/10 dark:bg-white/[0.07] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-secondary">
+                  <div className="mt-6 inline-flex rounded-full border border-primary/10 bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-secondary dark:border-white/10 dark:bg-white/[0.07]">
                     {testimonial.category}
                   </div>
                 </article>

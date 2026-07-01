@@ -441,3 +441,37 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .home-hero-layout {
+    grid-template-columns: minmax(0, 0.95fr) minmax(18rem, 1.05fr);
+    align-items: center;
+    min-height: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .home-hero-copy {
+    text-align: left;
+  }
+
+  .home-hero-copy h1 {
+    max-width: 28rem;
+    font-size: 2.25rem;
+    line-height: 1.06;
+  }
+
+  .home-hero-copy p {
+    max-width: 30rem;
+  }
+
+  .home-hero-copy > p:last-of-type {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .home-hero-visual {
+    max-width: min(42vw, 22rem);
+    aspect-ratio: 0.9;
+  }
+}

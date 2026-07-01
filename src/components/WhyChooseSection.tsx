@@ -82,7 +82,7 @@ export function WhyChooseSection() {
               >
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-secondary/70 to-transparent opacity-0 transition duration-300 group-hover:opacity-100" />
                 <div className="data-rain absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-15" />
-                <div className="relative mb-6 grid h-12 w-12 place-items-center rounded-[14px] bg-primary text-xl text-secondary shadow-lg shadow-primary/20 dark:bg-white dark:text-primary">
+                <div className="relative mb-6 grid h-12 w-12 place-items-center rounded-[14px] bg-secondary/14 text-xl text-secondary shadow-lg shadow-primary/5">
                   <Icon aria-hidden="true" />
                 </div>
                 <h3 className="relative text-xl font-semibold tracking-tight text-[#142033] dark:text-white">

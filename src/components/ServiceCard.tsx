@@ -15,7 +15,7 @@ export function ServiceCard({
 }: Service) {
   return (
     <motion.article
-      className="group premium-border relative min-h-[27rem] overflow-hidden rounded-[22px] bg-slate-100 dark:bg-primary shadow-xl shadow-primary/10 transition duration-300 dark:shadow-black/30"
+      className="group premium-border relative min-h-[27rem] overflow-hidden rounded-[22px] bg-slate-100 shadow-xl shadow-primary/10 transition duration-300 dark:bg-primary dark:shadow-black/30"
       initial={{ opacity: 0, y: 22 }}
       transition={{ duration: 0.45, ease: 'easeOut' }}
       viewport={{ once: true, margin: '-80px' }}

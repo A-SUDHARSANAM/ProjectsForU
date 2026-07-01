@@ -90,27 +90,28 @@ export function Home() {
             </motion.div>
           )
         })}
-        <div className="relative mx-auto grid min-h-[calc(100vh-5rem)] max-w-7xl items-center gap-12 px-5 py-16 sm:px-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-8">
+        <div className="home-hero-layout relative mx-auto grid min-h-[calc(100svh-5rem)] max-w-7xl items-start gap-8 px-4 py-10 sm:gap-12 sm:px-6 sm:py-16 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:px-8">
           <motion.div
+            className="home-hero-copy text-center lg:text-left"
             initial={{ opacity: 0, y: 26 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
             <motion.p
-              className="glass-panel mb-5 inline-flex rounded-full px-4 py-2 text-sm font-semibold text-[#1f2a3d] dark:text-secondary"
+              className="glass-panel mb-5 inline-flex max-w-full rounded-full px-4 py-2 text-center text-sm font-semibold text-[#1f2a3d] dark:text-secondary"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 0.5 }}
             >
               2026 product studio for intelligent hardware
             </motion.p>
-            <h1 className="max-w-5xl text-5xl font-semibold tracking-tight text-[#07111f] sm:text-6xl lg:text-7xl dark:text-white">
+            <h1 className="mx-auto max-w-5xl text-4xl font-semibold leading-tight tracking-tight text-[#07111f] sm:text-6xl lg:mx-0 lg:text-7xl dark:text-white">
               Transform bold ideas into{' '}
               <span className="holographic-text">future-ready products</span>
             </h1>
-            <div className="mt-6 max-w-3xl overflow-hidden">
+            <div className="mx-auto mt-5 max-w-3xl overflow-hidden sm:mt-6 lg:mx-0">
               <motion.p
-                className="typing-line whitespace-nowrap text-base font-semibold text-[#075fd6] sm:text-lg dark:text-secondary"
+                className="typing-line inline-block max-w-full text-sm font-semibold leading-7 text-[#075fd6] sm:whitespace-nowrap sm:text-lg dark:text-secondary"
                 initial={{ width: 0 }}
                 animate={{ width: '100%' }}
                 transition={{ duration: 3.4, ease: 'easeInOut', delay: 0.35 }}
@@ -118,22 +119,22 @@ export function Home() {
                 Electronics | Robotics | IoT | AI | Embedded Systems | 3D Design | 3D Printing
               </motion.p>
             </div>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#34445f] dark:text-slate-300">
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-[#34445f] sm:mt-6 sm:text-lg sm:leading-8 lg:mx-0 dark:text-slate-300">
               From student projects to industrial prototypes, ProjectsforU helps
               innovators build, learn, and launch technology solutions with the polish,
               speed, and systems thinking of a modern product company.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink to="/contact">
+            <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center lg:justify-start">
+              <ButtonLink className="w-full sm:w-auto" to="/contact">
                 Start Your Project <FiArrowRight className="ml-2" aria-hidden="true" />
               </ButtonLink>
-              <ButtonLink to="/portfolio" variant="secondary">
+              <ButtonLink className="w-full sm:w-auto" to="/portfolio" variant="secondary">
                 Explore Work
               </ButtonLink>
             </div>
           </motion.div>
           <HeroVisual />
-          <div className="mx-auto grid w-full max-w-3xl grid-cols-2 gap-3 lg:col-span-2 lg:-mt-8 sm:grid-cols-4">
+          <div className="mx-auto grid w-full max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4 lg:col-span-2 lg:-mt-8">
             {stats.map((stat, index) => (
               <AnimatedStatCard
                 index={index}

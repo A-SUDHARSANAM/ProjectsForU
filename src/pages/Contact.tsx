@@ -316,7 +316,7 @@ export function Contact() {
                       }}
                       type="button"
                     >
-                      <span className="mb-2 grid h-9 w-9 place-items-center rounded-[8px] bg-primary text-white dark:bg-secondary dark:text-primary">
+                      <span className="mb-2 grid h-9 w-9 place-items-center rounded-[8px] bg-secondary/14 text-secondary dark:bg-secondary dark:text-primary">
                         {isComplete ? <FiCheck aria-hidden="true" /> : <Icon aria-hidden="true" />}
                       </span>
                       <span className="block text-xs font-semibold uppercase tracking-[0.14em]">

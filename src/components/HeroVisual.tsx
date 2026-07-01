@@ -38,7 +38,7 @@ const floatingCards = [
 export function HeroVisual() {
   return (
     <motion.div
-      className="relative mx-auto aspect-[0.92] w-full max-w-[620px] lg:max-w-[700px]"
+      className="home-hero-visual relative mx-auto aspect-[0.82] w-full max-w-[23rem] sm:aspect-[0.92] sm:max-w-[620px] lg:max-w-[700px]"
       initial={{ opacity: 0, y: 42, rotateX: 8 }}
       animate={{ opacity: 1, y: 0, rotateX: 0 }}
       transition={{ duration: 0.9, ease: 'easeOut', delay: 0.12 }}
@@ -58,52 +58,52 @@ export function HeroVisual() {
 
       <motion.div
         animate={{ y: [0, -12, 0], rotateY: [-4, 5, -4], rotateX: [2, -1, 2] }}
-        className="glass-panel premium-border absolute inset-x-6 top-14 overflow-hidden rounded-[28px] p-4"
+        className="glass-panel premium-border absolute inset-x-3 top-8 overflow-hidden rounded-[22px] p-3 sm:inset-x-6 sm:top-14 sm:rounded-[28px] sm:p-4"
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
       >
         <div className="data-rain pointer-events-none absolute inset-0 opacity-25" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-white/34 to-transparent dark:from-white/10" />
-        <div className="mb-5 flex items-center justify-between">
+        <div className="mb-3 flex items-start justify-between gap-3 sm:mb-5 sm:items-center">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#075fd6] dark:text-secondary">
+            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#075fd6] sm:text-xs sm:tracking-[0.2em] dark:text-secondary">
               ProjectsforU OS
             </p>
-            <h2 className="mt-1 text-lg font-semibold text-[#253248] dark:text-white">
+            <h2 className="mt-1 text-base font-semibold text-[#253248] sm:text-lg dark:text-white">
               Spatial Build Console
             </h2>
           </div>
-          <span className="rounded-full border border-emerald-500/20 bg-emerald-500/12 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-400">
+          <span className="shrink-0 rounded-full border border-emerald-500/20 bg-emerald-500/12 px-2.5 py-1 text-[0.68rem] font-semibold text-emerald-700 sm:px-3 sm:text-xs dark:text-emerald-400">
             Live stack
           </span>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {dashboardMetrics.map((metric, index) => (
             <motion.div
-              className="rounded-[16px] border border-primary/10 bg-white/90 p-3 shadow-sm shadow-slate-950/5 dark:border-white/10 dark:bg-slate-950/52 dark:shadow-none"
+              className="rounded-[14px] border border-primary/10 bg-white/90 p-2 shadow-sm shadow-slate-950/5 sm:rounded-[16px] sm:p-3 dark:border-white/10 dark:bg-slate-950/52 dark:shadow-none"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 + index * 0.1 }}
               key={metric.label}
             >
-              <span className={`mb-3 block h-1.5 w-10 rounded-full ${metric.color}`} />
+              <span className={`mb-2 block h-1.5 w-8 rounded-full sm:mb-3 sm:w-10 ${metric.color}`} />
               <p className="text-xs font-medium text-[#647189] dark:text-slate-400">{metric.label}</p>
-              <p className="mt-1 text-lg font-semibold text-[#142033] dark:text-white">
+              <p className="mt-1 text-sm font-semibold text-[#142033] sm:text-lg dark:text-white">
                 {metric.value}
               </p>
             </motion.div>
           ))}
         </div>
 
-        <div className="mt-4 grid grid-cols-[1.1fr_0.9fr] gap-3">
-          <div className="rounded-[18px] border border-primary/10 bg-white/90 p-4 text-primary shadow-sm shadow-slate-950/5 dark:border-white/10 dark:bg-primary dark:text-white dark:shadow-none">
-            <div className="mb-4 flex items-center gap-2">
+        <div className="mt-3 grid grid-cols-[1.1fr_0.9fr] gap-2 sm:mt-4 sm:gap-3">
+          <div className="rounded-[16px] border border-primary/10 bg-white/90 p-3 text-primary shadow-sm shadow-slate-950/5 sm:rounded-[18px] sm:p-4 dark:border-white/10 dark:bg-primary dark:text-white dark:shadow-none">
+            <div className="mb-3 flex items-center gap-2 sm:mb-4">
               <FiActivity className="text-secondary" aria-hidden="true" />
-              <span className="text-xs font-semibold uppercase tracking-[0.18em]">
+              <span className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] sm:text-xs sm:tracking-[0.18em]">
                 Sensor Stream
               </span>
             </div>
-            <div className="flex h-24 items-end gap-2">
+            <div className="flex h-16 items-end gap-1.5 sm:h-24 sm:gap-2">
               {[42, 68, 52, 86, 64, 92, 58, 78, 96].map((height, index) => (
                 <motion.span
                   animate={{ height: [`${height - 18}%`, `${height}%`, `${height - 8}%`] }}
@@ -118,12 +118,12 @@ export function HeroVisual() {
               ))}
             </div>
           </div>
-          <div className="relative rounded-[18px] border border-primary/10 bg-white/90 p-4 shadow-sm shadow-slate-950/5 dark:border-white/10 dark:bg-slate-950/52 dark:shadow-none">
+          <div className="relative rounded-[16px] border border-primary/10 bg-white/90 p-3 shadow-sm shadow-slate-950/5 sm:rounded-[18px] sm:p-4 dark:border-white/10 dark:bg-slate-950/52 dark:shadow-none">
             <div className="absolute inset-0 rounded-[18px] bg-[linear-gradient(90deg,rgba(0,200,255,0.1)_1px,transparent_1px),linear-gradient(180deg,rgba(0,200,255,0.1)_1px,transparent_1px)] bg-[size:18px_18px]" />
             <div className="relative grid h-full place-items-center">
               <motion.div
                 animate={{ rotateX: [54, 64, 54], rotateZ: [45, 50, 45], scale: [1, 1.04, 1] }}
-                className="relative h-24 w-24 rounded-[16px] border border-secondary/50 bg-white shadow-[0_22px_45px_rgba(7,95,214,0.18)] dark:bg-primary dark:shadow-[0_22px_45px_rgba(0,212,255,0.32)]"
+                className="relative h-16 w-16 rounded-[14px] border border-secondary/50 bg-white shadow-[0_22px_45px_rgba(7,95,214,0.18)] sm:h-24 sm:w-24 sm:rounded-[16px] dark:bg-primary dark:shadow-[0_22px_45px_rgba(0,212,255,0.32)]"
                 transition={{ duration: 5.4, repeat: Infinity, ease: 'easeInOut' }}
               >
                 <span className="absolute left-4 top-4 h-3 w-3 rounded-full bg-secondary shadow-[0_0_18px_rgba(0,212,255,0.9)]" />
@@ -141,7 +141,7 @@ export function HeroVisual() {
         return (
           <motion.div
             animate={{ y: [0, index % 2 === 0 ? 14 : -14, 0] }}
-            className={`glass-panel absolute z-10 min-w-40 rounded-[18px] p-4 ${card.className}`}
+            className={`glass-panel absolute z-10 hidden min-w-40 rounded-[18px] p-4 sm:block ${card.className}`}
             initial={{ opacity: 0, y: 20, scale: 0.92 }}
             key={card.title}
             transition={{
@@ -176,7 +176,7 @@ export function HeroVisual() {
 
       <motion.div
         animate={{ y: [0, -10, 0] }}
-        className="absolute bottom-24 right-24 grid h-16 w-16 place-items-center rounded-full border border-secondary/40 bg-secondary/12 text-2xl text-secondary shadow-[0_0_42px_rgba(0,212,255,0.45)] backdrop-blur-xl"
+        className="absolute bottom-24 right-24 hidden h-16 w-16 place-items-center rounded-full border border-secondary/40 bg-secondary/12 text-2xl text-secondary shadow-[0_0_42px_rgba(0,212,255,0.45)] backdrop-blur-xl sm:grid"
         transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
       >
         <FiZap aria-hidden="true" />
