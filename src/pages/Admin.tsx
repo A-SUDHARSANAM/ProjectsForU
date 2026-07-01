@@ -501,7 +501,7 @@ function AdminLogin({
           </label>
           {error ? <p className="mt-4 text-sm font-semibold text-red-500">{error}</p> : null}
           <button
-            className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-xl shadow-primary/20 transition hover:bg-secondary hover:text-primary"
+            className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-xl shadow-primary/20 transition hover:bg-secondary hover:text-primary dark:bg-secondary dark:text-primary dark:hover:bg-white"
             type="submit"
           >
             Sign in securely

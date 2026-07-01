@@ -91,7 +91,7 @@ export function Services() {
                     whileInView={{ opacity: 1, y: 0 }}
                   >
                     <div className="mb-6 flex items-center justify-between">
-                      <div className="grid h-12 w-12 place-items-center rounded-[14px] bg-primary text-xl text-secondary dark:bg-white dark:text-primary">
+                      <div className="grid h-12 w-12 place-items-center rounded-[14px] bg-secondary/14 text-xl text-secondary">
                         <Icon aria-hidden="true" />
                       </div>
                       <span className="text-sm font-semibold text-secondary">0{index + 1}</span>

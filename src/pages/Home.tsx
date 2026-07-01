@@ -175,7 +175,7 @@ export function Home() {
 
       <TestimonialsSection />
 
-      <section className="future-shell bg-primary px-5 py-20 text-white sm:px-6 lg:px-8 dark:bg-black">
+      <section className="future-shell px-5 py-20 text-primary sm:px-6 lg:px-8 dark:text-white">
         <div className="mx-auto max-w-7xl">
           <SectionHeader
             eyebrow="Selected builds"

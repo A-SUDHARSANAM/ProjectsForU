@@ -77,10 +77,10 @@ export function Blog() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
           >
-            <div className="relative min-h-72 overflow-hidden rounded-[24px] bg-primary p-6 text-white dark:bg-black">
+            <div className="relative min-h-72 overflow-hidden rounded-[24px] border border-primary/10 bg-white/70 p-6 text-[#07111f] dark:border-white/10 dark:bg-black dark:text-white">
               <div className="data-rain absolute inset-0 opacity-25" />
               <div className="relative flex h-full flex-col justify-between">
-                <div className="grid h-14 w-14 place-items-center rounded-[16px] bg-secondary text-2xl text-primary">
+                <div className="grid h-14 w-14 place-items-center rounded-[16px] bg-secondary text-2xl text-white dark:text-primary">
                   <FeaturedIcon aria-hidden="true" />
                 </div>
                 <div>
@@ -144,7 +144,7 @@ export function Blog() {
                   whileInView={{ opacity: 1, y: 0 }}
                 >
                   <div className="mb-6 flex items-center justify-between">
-                    <div className="grid h-12 w-12 place-items-center rounded-[14px] bg-primary text-xl text-secondary dark:bg-white dark:text-primary">
+                    <div className="grid h-12 w-12 place-items-center rounded-[14px] bg-secondary/14 text-xl text-secondary">
                       <Icon aria-hidden="true" />
                     </div>
                     <span className="text-sm font-semibold text-[#647189] dark:text-slate-400">

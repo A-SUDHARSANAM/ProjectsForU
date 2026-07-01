@@ -96,7 +96,7 @@ export function HeroVisual() {
         </div>
 
         <div className="mt-4 grid grid-cols-[1.1fr_0.9fr] gap-3">
-          <div className="rounded-[18px] border border-primary/10 bg-primary p-4 text-white dark:border-white/10">
+          <div className="rounded-[18px] border border-primary/10 bg-white/90 p-4 text-primary shadow-sm shadow-slate-950/5 dark:border-white/10 dark:bg-primary dark:text-white dark:shadow-none">
             <div className="mb-4 flex items-center gap-2">
               <FiActivity className="text-secondary" aria-hidden="true" />
               <span className="text-xs font-semibold uppercase tracking-[0.18em]">
@@ -123,12 +123,12 @@ export function HeroVisual() {
             <div className="relative grid h-full place-items-center">
               <motion.div
                 animate={{ rotateX: [54, 64, 54], rotateZ: [45, 50, 45], scale: [1, 1.04, 1] }}
-                className="relative h-24 w-24 rounded-[16px] border border-secondary/50 bg-primary shadow-[0_22px_45px_rgba(0,212,255,0.32)]"
+                className="relative h-24 w-24 rounded-[16px] border border-secondary/50 bg-white shadow-[0_22px_45px_rgba(7,95,214,0.18)] dark:bg-primary dark:shadow-[0_22px_45px_rgba(0,212,255,0.32)]"
                 transition={{ duration: 5.4, repeat: Infinity, ease: 'easeInOut' }}
               >
                 <span className="absolute left-4 top-4 h-3 w-3 rounded-full bg-secondary shadow-[0_0_18px_rgba(0,212,255,0.9)]" />
                 <span className="absolute bottom-5 right-5 h-4 w-4 rounded-full bg-accent shadow-[0_0_18px_rgba(255,107,0,0.75)]" />
-                <span className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-[10px] border border-white/30 bg-white/10" />
+                <span className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-[10px] border border-primary/15 bg-primary/5 dark:border-white/30 dark:bg-white/10" />
               </motion.div>
             </div>
           </div>
@@ -152,7 +152,7 @@ export function HeroVisual() {
             }}
             whileInView={{ opacity: 1, scale: 1 }}
           >
-            <div className="mb-3 grid h-10 w-10 place-items-center rounded-[12px] bg-primary text-secondary dark:bg-white dark:text-primary">
+            <div className="mb-3 grid h-10 w-10 place-items-center rounded-[12px] bg-secondary/14 text-secondary dark:bg-white dark:text-primary">
               <Icon aria-hidden="true" />
             </div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#647189] dark:text-slate-400">
@@ -167,7 +167,7 @@ export function HeroVisual() {
 
       <motion.div
         animate={{ scale: [1, 1.04, 1], opacity: [0.6, 0.9, 0.6] }}
-        className="absolute bottom-10 right-12 hidden items-center gap-2 rounded-full border border-white/40 bg-primary/80 px-4 py-2 text-xs font-semibold text-white shadow-xl shadow-secondary/20 backdrop-blur-xl sm:flex"
+        className="absolute bottom-10 right-12 hidden items-center gap-2 rounded-full border border-primary/10 bg-white/82 px-4 py-2 text-xs font-semibold text-primary shadow-xl shadow-secondary/10 backdrop-blur-xl sm:flex dark:border-white/40 dark:bg-primary/80 dark:text-white dark:shadow-secondary/20"
         transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
       >
         <FiDatabase className="text-secondary" aria-hidden="true" />

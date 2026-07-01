@@ -83,10 +83,10 @@ export function About() {
                   </div>
                 ))}
               </div>
-              <div className="relative mt-5 rounded-[22px] bg-primary p-6 text-white dark:bg-black">
+              <div className="relative mt-5 rounded-[22px] border border-primary/10 bg-white/70 p-6 text-[#07111f] dark:border-white/10 dark:bg-black dark:text-white">
                 <FiTarget className="text-3xl text-secondary" aria-hidden="true" />
                 <h2 className="mt-5 text-2xl font-semibold">Our operating belief</h2>
-                <p className="mt-3 leading-8 text-slate-300">
+                <p className="mt-3 leading-8 text-[#4a5870] dark:text-slate-300">
                   The best technical projects are not just assembled. They are scoped,
                   designed, tested, explained, and handed over with clarity.
                 </p>
@@ -126,7 +126,7 @@ export function About() {
 
               return (
                 <article className="glass-panel micro-lift rounded-[24px] p-6" key={item.title}>
-                  <div className="mb-6 grid h-12 w-12 place-items-center rounded-[14px] bg-primary text-xl text-secondary dark:bg-white dark:text-primary">
+                  <div className="mb-6 grid h-12 w-12 place-items-center rounded-[14px] bg-secondary/14 text-xl text-secondary">
                     <Icon aria-hidden="true" />
                   </div>
                   <h3 className="text-2xl font-semibold text-[#142033] dark:text-white">{item.title}</h3>
